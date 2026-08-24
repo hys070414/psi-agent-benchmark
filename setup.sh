@@ -40,10 +40,12 @@ cd $PSI_DIR
 	chmod +x $PSI_DIR/run_benchmark.sh
 
 # 4. 提示用户配置环境变量
-	if [ ! -f "$WORKDIR/.env" ]; then
-	    cp $WORKDIR/.env.example $WORKDIR/.env
-	    echo "[setup] created $WORKDIR/.env, please edit it with real credentials"
-	fi
+		if [ ! -f "$WORKDIR/.env" ]; then
+		    cp $WORKDIR/.env.example $WORKDIR/.env
+		    echo "[setup] created $WORKDIR/.env, please edit it with real credentials"
+		fi
+		# 同时复制 .env 到 psi-agent 目录，确保 run_all_cases.py 能读到
+		cp $WORKDIR/.env $PSI_DIR/.env
 
 	# 5. 预检：harbor / docker
 	HARBOR_BIN=${TB_HARBOR_BIN:-harbor}

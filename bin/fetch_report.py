@@ -14,18 +14,24 @@ load_dotenv(REPO_ROOT / ".env")
 HOST = os.getenv("TB_BENCH_HOST", "152.42.223.183")
 USER = os.getenv("TB_BENCH_USER", "root")
 PASSWORD = os.getenv("TB_BENCH_PASSWORD", "")
+KEY_FILE = os.getenv("TB_BENCH_KEY", "")
 WORKDIR = os.getenv("TB_BENCH_WORKDIR", "/root/haitun-tb")
 LATEST_FILE = f"{WORKDIR}/pilot_results/LATEST_REPORT.txt"
 
 
 def main():
-    if not PASSWORD:
-        print("[fetch_report] error: TB_BENCH_PASSWORD not set in .env")
+    if not PASSWORD and not KEY_FILE:
+        print("[fetch_report] error: TB_BENCH_KEY or TB_BENCH_PASSWORD not set in .env")
         sys.exit(1)
 
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(HOST, username=USER, password=PASSWORD, timeout=20)
+    kwargs = {"username": USER, "timeout": 20}
+    if KEY_FILE:
+        kwargs["key_filename"] = KEY_FILE
+    elif PASSWORD:
+        kwargs["password"] = PASSWORD
+    client.connect(HOST, **kwargs)
 
     stdin, stdout, stderr = client.exec_command(f"cat {LATEST_FILE}", timeout=30)
     report_path = stdout.read().decode("utf-8", "ignore").strip().splitlines()[-1]

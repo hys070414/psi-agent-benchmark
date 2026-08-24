@@ -53,8 +53,10 @@ def log(msg):
 
 
 def load_env():
-    """Load psi-agent .env into os.environ."""
-    env_file = PSI_DIR / ".env"
+    """Load psi-agent .env into os.environ — try WORKDIR first, then PSI_DIR."""
+    env_file = WORKDIR / ".env"
+    if not env_file.exists():
+        env_file = PSI_DIR / ".env"
     if env_file.exists():
         with open(env_file, "r", encoding="utf-8") as f:
             for line in f:
