@@ -1,0 +1,7 @@
+# 本地触发与报告工具依赖
+paramiko>=3.0
+pyyaml>=6.0
+python-dotenv>=1.0
+
+# 可选：如需本地解析 tokenizer 估算 token
+# tiktoken>=0.7.0

@@ -1,0 +1,152 @@
+{
+  "cobol-modernization": {
+    "version": "2.1",
+    "domain": "Software Engineering",
+    "difficulty": "易"
+  },
+  "fix-git": {
+    "version": "2.1",
+    "domain": "Software Engineering",
+    "difficulty": "易"
+  },
+  "overfull-hbox": {
+    "version": "2.1",
+    "domain": "Debugging",
+    "difficulty": "易"
+  },
+  "prove-plus-comm": {
+    "version": "2.1",
+    "domain": "Software Engineering",
+    "difficulty": "易"
+  },
+  "caffe-cifar-10": {
+    "version": "2.1",
+    "domain": "Machine Learning",
+    "difficulty": "中"
+  },
+  "chess-best-move": {
+    "version": "2.1",
+    "domain": "Games",
+    "difficulty": "中"
+  },
+  "largest-eigenval": {
+    "version": "2.1",
+    "domain": "Mathematics",
+    "difficulty": "中"
+  },
+  "crack-7z-hash": {
+    "version": "2.1",
+    "domain": "Security",
+    "difficulty": "中"
+  },
+  "filter-js-from-html": {
+    "version": "2.1",
+    "domain": "Security",
+    "difficulty": "中"
+  },
+  "polyglot-c-py": {
+    "version": "2.1",
+    "domain": "Software Engineering",
+    "difficulty": "中"
+  },
+  "db-wal-recovery": {
+    "version": "2.1",
+    "domain": "File Operations",
+    "difficulty": "中"
+  },
+  "rstan-to-pystan": {
+    "version": "2.1",
+    "domain": "Data Science",
+    "difficulty": "中"
+  },
+  "configure-git-webserver": {
+    "version": "2.1",
+    "domain": "System Administration",
+    "difficulty": "难"
+  },
+  "install-windows-3.11": {
+    "version": "2.1",
+    "domain": "System Administration",
+    "difficulty": "难"
+  },
+  "llm-inference-batching-scheduler": {
+    "version": "2.1",
+    "domain": "Machine Learning",
+    "difficulty": "难"
+  },
+  "foodstuff-beta-activity": {
+    "version": "3.0",
+    "domain": "Science（Chemistry）",
+    "difficulty": "易"
+  },
+  "photonic-waveguide-routing": {
+    "version": "3.0",
+    "domain": "Software（Algorithms）",
+    "difficulty": "易"
+  },
+  "vllm-deepseek-streaming": {
+    "version": "3.0",
+    "domain": "ML（Inference）",
+    "difficulty": "易"
+  },
+  "medical-claims-processing": {
+    "version": "3.0",
+    "domain": "Operations（Claims）",
+    "difficulty": "易"
+  },
+  "interleaved-vigenere": {
+    "version": "3.0",
+    "domain": "Security（Cryptography）",
+    "difficulty": "易"
+  },
+  "freecad-platform-drawing": {
+    "version": "3.0",
+    "domain": "Hardware（CAD）",
+    "difficulty": "易"
+  },
+  "music-harmony": {
+    "version": "3.0",
+    "domain": "Media（Music）",
+    "difficulty": "易"
+  },
+  "bun-sourcemap-leak": {
+    "version": "3.0",
+    "domain": "Software（Systems）",
+    "difficulty": "易"
+  },
+  "atrx-vep-crispr": {
+    "version": "3.0",
+    "domain": "Science（Biology）",
+    "difficulty": "中"
+  },
+  "live-database-cutover": {
+    "version": "3.0",
+    "domain": "Software（Databases）",
+    "difficulty": "中"
+  },
+  "fin-saccr-rwa": {
+    "version": "3.0",
+    "domain": "Operations（Finance）",
+    "difficulty": "中"
+  },
+  "satb-audio-transcription": {
+    "version": "3.0",
+    "domain": "Media（Music）",
+    "difficulty": "中"
+  },
+  "takens-embedding-lean": {
+    "version": "3.0",
+    "domain": "Science（Math）",
+    "difficulty": "难"
+  },
+  "gpt2-codegolf": {
+    "version": "3.0",
+    "domain": "ML（Inference）",
+    "difficulty": "难"
+  },
+  "retro-console-soc": {
+    "version": "3.0",
+    "domain": "Hardware（RTL）",
+    "difficulty": "难"
+  }
+}

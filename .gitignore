@@ -1,0 +1,14 @@
+.env
+.env.local
+__pycache__/
+*.pyc
+*.log
+*.swp
+.DS_Store
+.vscode/
+.idea/
+
+# benchmark 产物
+pilot_results/
+manifests/
+deps/
