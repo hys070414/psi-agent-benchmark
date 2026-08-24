@@ -40,12 +40,26 @@ cd $PSI_DIR
 	chmod +x $PSI_DIR/run_benchmark.sh
 
 # 4. 提示用户配置环境变量
-if [ ! -f "$WORKDIR/.env" ]; then
-    cp $WORKDIR/.env.example $WORKDIR/.env
-    echo "[setup] created $WORKDIR/.env, please edit it with real credentials"
-fi
+	if [ ! -f "$WORKDIR/.env" ]; then
+	    cp $WORKDIR/.env.example $WORKDIR/.env
+	    echo "[setup] created $WORKDIR/.env, please edit it with real credentials"
+	fi
 
-echo "[setup] done. Next steps:"
+	# 5. 预检：harbor / docker
+	HARBOR_BIN=${TB_HARBOR_BIN:-harbor}
+	if command -v $HARBOR_BIN &> /dev/null; then
+	    echo "[setup] harbor: $($HARBOR_BIN --version 2>&1 || echo 'found')"
+	else
+	    echo "[setup] WARNING: harbor not found. Install Terminal-Bench CLI to build images."
+	    echo "[setup]   pip install terminal-bench  (or see https://github.com/terminal-bench/terminal-bench)"
+	fi
+	if docker ps &> /dev/null; then
+	    echo "[setup] docker: OK"
+	else
+	    echo "[setup] WARNING: docker not accessible. Ensure user is in docker group."
+	fi
+	
+	echo "[setup] done. Next steps:"
 echo "  1. edit $WORKDIR/.env"
 echo "  2. build case images (see README)"
 echo "  3. run: bash $PSI_DIR/run_benchmark.sh"

@@ -13,6 +13,11 @@ MANIFEST_JSON=$MANIFEST_DIR/benchmark_manifest.json
 echo "[run_benchmark] workdir: $WORKDIR"
 echo "[run_benchmark] psi-agent ref: $PSI_AGENT_REF"
 
+# Load .env if present
+if [ -f "$WORKDIR/.env" ]; then
+    set -a; source "$WORKDIR/.env"; set +a
+fi
+
 cd "$WORKDIR"
 
 # Optionally re-setup to ensure correct psi-agent version is checked out
