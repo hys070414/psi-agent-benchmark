@@ -16,12 +16,18 @@ echo "[run_benchmark] psi-agent ref: $PSI_AGENT_REF"
 cd "$WORKDIR"
 
 # Optionally re-setup to ensure correct psi-agent version is checked out
-if [ -f "./setup.sh" ]; then
-    echo "[run_benchmark] running setup.sh to ensure psi-agent version $PSI_AGENT_REF"
-    bash ./setup.sh
-fi
-
-# Backup old manifest so previous runs are not lost
+	if [ -f "./setup.sh" ]; then
+	    echo "[run_benchmark] running setup.sh to ensure psi-agent version $PSI_AGENT_REF"
+	    bash ./setup.sh
+	fi
+	
+	# Build Docker images if missing (skip if images already exist)
+	if [ -f "./build_images.sh" ]; then
+	    echo "[run_benchmark] building missing Docker images ..."
+	    bash ./build_images.sh
+	fi
+	
+	# Backup old manifest so previous runs are not lost
 if [ -f "$MANIFEST_JSON" ]; then
     BACKUP="$MANIFEST_DIR/benchmark_manifest.${TIMESTAMP}.json"
     cp "$MANIFEST_JSON" "$BACKUP"

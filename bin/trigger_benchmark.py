@@ -21,6 +21,7 @@ load_dotenv(REPO_ROOT / ".env")
 HOST = os.getenv("TB_BENCH_HOST", "152.42.223.183")
 USER = os.getenv("TB_BENCH_USER", "root")
 PASSWORD = os.getenv("TB_BENCH_PASSWORD", "")
+KEY_FILE = os.getenv("TB_BENCH_KEY", "")
 WORKDIR = os.getenv("TB_BENCH_WORKDIR", "/root/haitun-tb")
 PSI_DIR = f"{WORKDIR}/psi-agent"
 SETUP_SCRIPT = f"{WORKDIR}/setup.sh"
@@ -34,7 +35,15 @@ POLL_INTERVAL = 60  # seconds
 def ssh_client():
     c = paramiko.SSHClient()
     c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    c.connect(HOST, username=USER, password=PASSWORD, timeout=30)
+    kwargs = {"username": USER, "timeout": 30}
+    if KEY_FILE:
+        kwargs["key_filename"] = KEY_FILE
+    elif PASSWORD:
+        kwargs["password"] = PASSWORD
+    else:
+        print("[trigger] error: TB_BENCH_KEY or TB_BENCH_PASSWORD must be set in .env")
+        sys.exit(1)
+    c.connect(HOST, **kwargs)
     return c
 
 
@@ -132,12 +141,12 @@ def fetch_report():
 
 def main():
     parser = argparse.ArgumentParser(description="发布前测试：对指定分支跑 TB benchmark")
-    parser.add_argument("--branch", "-b", required=True, help="Haitun 分支名（如 feature-xxx, v2.1.0, main）")
+    parser.add_argument("--branch", "-b", default="main", help="Haitun 分支名（默认 main）")
     parser.add_argument("--wait", "-w", action="store_true", help="等待跑完并自动下载报告")
     args = parser.parse_args()
 
-    if not PASSWORD:
-        print("[trigger] error: TB_BENCH_PASSWORD not set in .env")
+    if not PASSWORD and not KEY_FILE:
+        print("[trigger] error: TB_BENCH_KEY or TB_BENCH_PASSWORD must be set in .env")
         sys.exit(1)
 
     branch = args.branch
