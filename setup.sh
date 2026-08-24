@@ -38,6 +38,11 @@ cd $PSI_DIR
 	cp $WORKDIR/case_metadata.json $WORKDIR/manifests/case_metadata.json
 	cp $WORKDIR/bin/run_benchmark.sh $PSI_DIR/run_benchmark.sh
 	chmod +x $PSI_DIR/run_benchmark.sh
+	# 复制容器版 workspace（tools + system prompt）到 psi-agent，容器工具通过
+	# PSI_PILOT_CONTAINER 环境变量操作对应 case 的 Docker 容器
+	rm -rf $PSI_DIR/examples/tb-pilot-workspace
+	cp -r $WORKDIR/tb-pilot-workspace $PSI_DIR/examples/tb-pilot-workspace
+	echo "[setup] deployed container workspace to $PSI_DIR/examples/tb-pilot-workspace"
 
 # 4. 提示用户配置环境变量
 		if [ ! -f "$WORKDIR/.env" ]; then
