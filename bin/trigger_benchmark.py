@@ -71,7 +71,7 @@ def checkin():
 def deploy_branch(branch):
     """Checkout the target branch on server."""
     print(f"[trigger] deploying branch: {branch}")
-    deploy_cmd = f"export PSI_AGENT_REF={branch}; bash {SETUP_SCRIPT}"
+    deploy_cmd = f"export TB_BENCH_WORKDIR={WORKDIR}; export PSI_AGENT_REF={branch}; bash {SETUP_SCRIPT}"
     out, err = run_remote(deploy_cmd, timeout=120)
     print(out)
     if err.strip():
@@ -83,7 +83,8 @@ def launch_benchmark(branch):
     session = f"tb-bench-{branch.replace('/', '-')}-{int(time.time())}"
     tmux_cmd = (
         f"tmux new-session -d -s {session} "
-        f"\"cd {PSI_DIR} && python3 run_all_cases.py; "
+        f"\"export TB_BENCH_WORKDIR={WORKDIR}; "
+        f"cd {PSI_DIR} && python3 run_all_cases.py; "
         f"REPORT=\\$(python3 generate_report.py); "
         f"echo \\\"\\$REPORT\\\" > {LATEST_REPORT}; "
         f"echo '=== DONE ===' >> {RESULTS_DIR}/benchmark.log\""
@@ -96,16 +97,20 @@ def launch_benchmark(branch):
 
 
 def poll_completion(timeout_hours=12):
-    """Poll until all 30 cases are done or timeout."""
+    """Poll until all cases are done or timeout."""
     print("[trigger] waiting for benchmark to complete ...")
     deadline = time.time() + timeout_hours * 3600
     while time.time() < deadline:
-        out, _ = run_remote(
-            f"python3 -c \"import json; m=json.load(open('{MANIFEST_JSON}')); "
-            f"done=sum(1 for v in m.values() if isinstance(v,dict) and v.get('reward') not in ('','unknown')); "
-            f"print(f'{done}/{len([k for k in m if k!=\\\"_meta\\\"])}') if len(m)>1 else print('not_started')\"",
-            timeout=30,
+        poll_cmd = (
+            "python3 -c \""
+            "import json; "
+            "m=json.load(open('" + MANIFEST_JSON + "')); "
+            "done=sum(1 for v in m.values() if isinstance(v,dict) and v.get('reward') not in ('','unknown')); "
+            "total=len([k for k in m if k!='_meta']); "
+            "print(f'{done}/{total}') if total>0 else print('not_started')"
+            "\""
         )
+        out, _ = run_remote(poll_cmd, timeout=30)
         print(f"  [{time.strftime('%H:%M:%S')}] progress: {out.strip()}")
         if "/" in out and out.strip().split("/")[0] == out.strip().split("/")[1]:
             print("[trigger] all cases completed!")

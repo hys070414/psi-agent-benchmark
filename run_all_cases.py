@@ -18,8 +18,8 @@ MANIFEST_DIR = WORKDIR / "manifests"
 MANIFEST_JSON = MANIFEST_DIR / "benchmark_manifest.json"
 MANIFEST_MD = MANIFEST_DIR / "benchmark_manifest.md"
 PSI_DIR = WORKDIR / "psi-agent"
-HARBOR_BIN = "/root/miniconda3/bin/harbor"
-UV_BIN = "/root/.local/bin/uv"
+HARBOR_BIN = os.environ.get("TB_HARBOR_BIN", "/root/miniconda3/bin/harbor")
+UV_BIN = os.environ.get("TB_UV_BIN", "/root/.local/bin/uv")
 WORKSPACE = "examples/tb-pilot-workspace"
 
 def load_cases():

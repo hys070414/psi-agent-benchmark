@@ -32,8 +32,8 @@ cd $PSI_DIR
 	# 3. 将本仓库脚本复制到工作目录
 	cp $WORKDIR/run_all_cases.py $PSI_DIR/run_all_cases.py
 	cp $WORKDIR/generate_report.py $PSI_DIR/generate_report.py
-	cp $WORKDIR/build_images.sh $WORKDIR/build_images.sh
-	chmod +x $WORKDIR/build_images.sh
+	cp $WORKDIR/build_images.sh $PSI_DIR/build_images.sh
+	chmod +x $WORKDIR/build_images.sh $PSI_DIR/build_images.sh
 	mkdir -p $WORKDIR/manifests
 	cp $WORKDIR/case_metadata.json $WORKDIR/manifests/case_metadata.json
 	cp $WORKDIR/bin/run_benchmark.sh $PSI_DIR/run_benchmark.sh
