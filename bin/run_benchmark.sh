@@ -5,11 +5,21 @@ WORKDIR=${TB_BENCH_WORKDIR:-/root/haitun-tb}
 PSI_DIR=$WORKDIR/psi-agent
 RESULTS_DIR=$WORKDIR/pilot_results
 MANIFEST_DIR=$WORKDIR/manifests
+PSI_AGENT_REF=${PSI_AGENT_REF:-main}
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 TMUX_SESSION="tb-bench-${TIMESTAMP}"
 MANIFEST_JSON=$MANIFEST_DIR/benchmark_manifest.json
 
+echo "[run_benchmark] workdir: $WORKDIR"
+echo "[run_benchmark] psi-agent ref: $PSI_AGENT_REF"
+
 cd "$WORKDIR"
+
+# Optionally re-setup to ensure correct psi-agent version is checked out
+if [ -f "./setup.sh" ]; then
+    echo "[run_benchmark] running setup.sh to ensure psi-agent version $PSI_AGENT_REF"
+    bash ./setup.sh
+fi
 
 # Backup old manifest so previous runs are not lost
 if [ -f "$MANIFEST_JSON" ]; then

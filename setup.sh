@@ -5,21 +5,28 @@ set -euo pipefail
 
 WORKDIR=${TB_BENCH_WORKDIR:-/root/haitun-tb}
 PSI_DIR=$WORKDIR/psi-agent
+PSI_AGENT_REF=${PSI_AGENT_REF:-main}
+PSI_AGENT_REPO=${PSI_AGENT_REPO:-https://github.com/genuineknowledge/psi-agent.git}
 
 echo "[setup] workdir: $WORKDIR"
+echo "[setup] psi-agent version/ref: $PSI_AGENT_REF"
 mkdir -p $WORKDIR
 
 # 1. 安装 Python 依赖
 pip install -r requirements.txt
 
-# 2. 拉取 psi-agent（如尚未拉取）
+# 2. 拉取 psi-agent 并切换到指定版本
 if [ ! -d "$PSI_DIR/.git" ]; then
     echo "[setup] cloning psi-agent..."
-    git clone https://github.com/hys070414/psi-agent.git $PSI_DIR
-else
-    echo "[setup] psi-agent already exists, pulling latest..."
-    cd $PSI_DIR && git pull
+	    git clone $PSI_AGENT_REPO $PSI_DIR
 fi
+
+cd $PSI_DIR
+git fetch origin
+git checkout "$PSI_AGENT_REF"
+git pull origin "$PSI_AGENT_REF" || true
+
+echo "[setup] current psi-agent commit: $(git rev-parse --short HEAD)"
 
 # 3. 将本仓库脚本复制/链接到 psi-agent 目录
 cp run_all_cases.py $PSI_DIR/run_all_cases.py

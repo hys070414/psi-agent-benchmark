@@ -132,6 +132,7 @@ def generate(output_path=None):
     lines = []
     lines.append("# TB 2.1/3.0 Benchmark 数据报告\n")
     lines.append(f"> 生成时间：{time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+    lines.append(f"> Agent 版本：`{meta.get('agent_version', 'unknown')}`\n")
     lines.append(f"> 模型：`{meta.get('model', 'unknown')}`\n")
     lines.append(f"> 运行起止：{meta.get('start_time', '-')} ~ {meta.get('end_time', '-')}\n")
     lines.append(f"> 总耗时：{format_elapsed(elapsed)}\n")
@@ -152,6 +153,7 @@ def generate(output_path=None):
     lines.append(f"| 估算总 token | {total_tokens:,} |")
     lines.append(f"| API 请求数 | {sum(c['requests'] for c in cases):,} |")
     lines.append(f"| 底层模型 | `{meta.get('model', 'unknown')}` |")
+    lines.append(f"| Agent 版本 | `{meta.get('agent_version', 'unknown')}` |")
     lines.append("\n")
 
     # 2. 按版本维度

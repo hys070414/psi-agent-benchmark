@@ -315,6 +315,19 @@ def get_model():
     return os.environ.get("PSI_AI_MODEL", "unknown")
 
 
+def get_agent_version():
+    ref = os.environ.get("PSI_AGENT_REF", "main")
+    psi_dir = PSI_DIR
+    try:
+        import subprocess
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], cwd=psi_dir, text=True
+        ).strip()
+        return f"{ref}@{commit}"
+    except Exception:
+        return ref
+
+
 def main():
     load_env()
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -322,17 +335,19 @@ def main():
     manifest = load_manifest()
 
     model = get_model()
+    agent_version = get_agent_version()
     start_ts = time.strftime("%Y-%m-%d %H:%M:%S")
     start_epoch = time.time()
     manifest["_meta"] = {
         "model": model,
+        "agent_version": agent_version,
         "start_time": start_ts,
         "start_epoch": start_epoch,
         "timeout_cap_sec": 3600,
         "total_cases": len(CASES),
     }
     save_manifest(manifest)
-    log(f"Benchmark started: model={model}, cases={len(CASES)}")
+    log(f"Benchmark started: model={model}, agent_version={agent_version}, cases={len(CASES)}")
 
     for idx, case in enumerate(CASES, 1):
         version = case["version"]

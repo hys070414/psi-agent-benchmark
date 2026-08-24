@@ -39,10 +39,14 @@
 
 ### 1. 克隆仓库到服务器
 
+建议把仓库直接作为评测工作目录：
+
 ```bash
-git clone <your-repo-url> /root/tb-bench-psi-agent
-cd /root/tb-bench-psi-agent
+git clone <your-repo-url> /root/haitun-tb
+cd /root/haitun-tb
 ```
+
+这样 `setup.sh`、`run_benchmark.sh`、`.env` 都在 `/root/haitun-tb` 下，路径保持一致。
 
 ### 2. 配置环境变量
 
