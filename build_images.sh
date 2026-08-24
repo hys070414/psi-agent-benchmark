@@ -22,39 +22,22 @@ mkdir -p "$TASKS_DIR" "$LOG_DIR" "$MANIFEST_DIR"
 BUILD_LOG="$LOG_DIR/build_images.log"
 echo "[build] $(date) start" | tee "$BUILD_LOG"
 
-# 30 cases
-CASES=(
-    "2.1/cobol-modernization"
-    "2.1/fix-git"
-    "2.1/overfull-hbox"
-    "2.1/prove-plus-comm"
-    "2.1/caffe-cifar-10"
-    "2.1/chess-best-move"
-    "2.1/largest-eigenval"
-    "2.1/crack-7z-hash"
-    "2.1/filter-js-from-html"
-    "2.1/polyglot-c-py"
-    "2.1/db-wal-recovery"
-    "2.1/rstan-to-pystan"
-    "2.1/configure-git-webserver"
-    "2.1/install-windows-3.11"
-    "2.1/llm-inference-batching-scheduler"
-    "3.0/foodstuff-beta-activity"
-    "3.0/photonic-waveguide-routing"
-    "3.0/vllm-deepseek-streaming"
-    "3.0/medical-claims-processing"
-    "3.0/interleaved-vigenere"
-    "3.0/freecad-platform-drawing"
-    "3.0/music-harmony"
-    "3.0/bun-sourcemap-leak"
-    "3.0/atrx-vep-crispr"
-    "3.0/live-database-cutover"
-    "3.0/fin-saccr-rwa"
-    "3.0/satb-audio-transcription"
-    "3.0/takens-embedding-lean"
-    "3.0/gpt2-codegolf"
-    "3.0/retro-console-soc"
-)
+# 从 case_metadata.json 读取启用的 case 列表
+CASES_JSON="$MANIFEST_DIR/case_metadata.json"
+if [ ! -f "$CASES_JSON" ]; then
+    echo "[build] ERROR: $CASES_JSON not found" | tee -a "$BUILD_LOG"
+    exit 1
+fi
+
+# 用 python3 解析 JSON，输出 "version/name" 格式的 case 列表
+readarray -t CASES < <(python3 -c "
+import json
+with open('$CASES_JSON') as f:
+    meta = json.load(f)
+for key, info in sorted(meta.items()):
+    if info.get('enabled', True):
+        print(key)
+")
 
 total=${#CASES[@]}
 ok=0

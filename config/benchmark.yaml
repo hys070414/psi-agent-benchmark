@@ -1,4 +1,5 @@
-# Terminal-Bench 2.1/3.0 全量 benchmark 配置
+# Terminal-Bench benchmark 配置
+# 唯一的数据源是 case_metadata.json，本文件只存运行时参数
 
 model: deepseek-v4-flash
 
@@ -8,37 +9,19 @@ timeout:
   verifier_build: 3600 # verifier Docker image 构建时间
   command: 300         # 单次 docker exec 命令超时
 
-# 30 个待测 case（版本/名称）
-cases:
-  # TB 2.1
-  - 2.1/cobol-modernization
-  - 2.1/fix-git
-  - 2.1/overfull-hbox
-  - 2.1/prove-plus-comm
-  - 2.1/caffe-cifar-10
-  - 2.1/chess-best-move
-  - 2.1/largest-eigenval
-  - 2.1/crack-7z-hash
-  - 2.1/filter-js-from-html
-  - 2.1/polyglot-c-py
-  - 2.1/db-wal-recovery
-  - 2.1/rstan-to-pystan
-  - 2.1/configure-git-webserver
-  - 2.1/install-windows-3.11
-  - 2.1/llm-inference-batching-scheduler
-  # TB 3.0
-  - 3.0/foodstuff-beta-activity
-  - 3.0/photonic-waveguide-routing
-  - 3.0/vllm-deepseek-streaming
-  - 3.0/medical-claims-processing
-  - 3.0/interleaved-vigenere
-  - 3.0/freecad-platform-drawing
-  - 3.0/music-harmony
-  - 3.0/bun-sourcemap-leak
-  - 3.0/atrx-vep-crispr
-  - 3.0/live-database-cutover
-  - 3.0/fin-saccr-rwa
-  - 3.0/satb-audio-transcription
-  - 3.0/takens-embedding-lean
-  - 3.0/gpt2-codegolf
-  - 3.0/retro-console-soc
+# case 筛选（仅从 case_metadata.json 中 enabled=true 的 case 里筛选）
+# 满足"所有条件"的 case 才会被选中
+case_filter:
+  # 只跑指定版本，空数组 = 全部版本
+  # 例: ["2.1"] = 只跑 TB 2.1
+  # 例: ["2.1", "3.0"] = 全部
+  include_versions: []
+
+  # 只跑指定难度，空数组 = 全部难度
+  # 例: ["易"] = 只跑容易的
+  # 例: ["易", "中"] = 跑容易+中等
+  include_difficulties: []
+
+  # 明确排除的 case（版本/名称）
+  # 例: ["2.1/caffe-cifar-10", "3.0/takens-embedding-lean"]
+  exclude_cases: []

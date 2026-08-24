@@ -94,7 +94,7 @@ def generate(output_path=None):
     for key, item in manifest.items():
         name = item.get("name", key.split("/")[-1])
         version = item.get("version", "")
-        md = metadata.get(name, {})
+        md = metadata.get(key, {})
         domain = md.get("domain", item.get("domain", ""))
         difficulty = md.get("difficulty", item.get("difficulty", ""))
         tokens = estimate_tokens(name)

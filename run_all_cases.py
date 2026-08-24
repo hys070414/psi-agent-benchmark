@@ -22,41 +22,25 @@ HARBOR_BIN = "/root/miniconda3/bin/harbor"
 UV_BIN = "/root/.local/bin/uv"
 WORKSPACE = "examples/tb-pilot-workspace"
 
-# 30 cases from TB测试集Case选择清单-2.1-3.0.md
-CASES = [
-    # TB 2.1 子集
-    {"version": "2.1", "name": "cobol-modernization", "difficulty": "易", "domain": "Software Engineering"},
-    {"version": "2.1", "name": "fix-git", "difficulty": "易", "domain": "Software Engineering"},
-    {"version": "2.1", "name": "overfull-hbox", "difficulty": "易", "domain": "Debugging"},
-    {"version": "2.1", "name": "prove-plus-comm", "difficulty": "易", "domain": "Software Engineering"},
-    {"version": "2.1", "name": "caffe-cifar-10", "difficulty": "中", "domain": "Machine Learning"},
-    {"version": "2.1", "name": "chess-best-move", "difficulty": "中", "domain": "Games"},
-    {"version": "2.1", "name": "largest-eigenval", "difficulty": "中", "domain": "Mathematics"},
-    {"version": "2.1", "name": "crack-7z-hash", "difficulty": "中", "domain": "Security"},
-    {"version": "2.1", "name": "filter-js-from-html", "difficulty": "中", "domain": "Security"},
-    {"version": "2.1", "name": "polyglot-c-py", "difficulty": "中", "domain": "Software Engineering"},
-    {"version": "2.1", "name": "db-wal-recovery", "difficulty": "中", "domain": "File Operations"},
-    {"version": "2.1", "name": "rstan-to-pystan", "difficulty": "中", "domain": "Data Science"},
-    {"version": "2.1", "name": "configure-git-webserver", "difficulty": "难", "domain": "System Administration"},
-    {"version": "2.1", "name": "install-windows-3.11", "difficulty": "难", "domain": "System Administration"},
-    {"version": "2.1", "name": "llm-inference-batching-scheduler", "difficulty": "难", "domain": "Machine Learning"},
-    # TB 3.0 子集
-    {"version": "3.0", "name": "foodstuff-beta-activity", "difficulty": "易", "domain": "Science（Chemistry）", "expert_time": 1.5},
-    {"version": "3.0", "name": "photonic-waveguide-routing", "difficulty": "易", "domain": "Software（Algorithms）", "expert_time": 0.75},
-    {"version": "3.0", "name": "vllm-deepseek-streaming", "difficulty": "易", "domain": "ML（Inference）", "expert_time": 2.0},
-    {"version": "3.0", "name": "medical-claims-processing", "difficulty": "易", "domain": "Operations（Claims）", "expert_time": 2.0},
-    {"version": "3.0", "name": "interleaved-vigenere", "difficulty": "易", "domain": "Security（Cryptography）", "expert_time": 2.0},
-    {"version": "3.0", "name": "freecad-platform-drawing", "difficulty": "易", "domain": "Hardware（CAD）", "expert_time": 1.5},
-    {"version": "3.0", "name": "music-harmony", "difficulty": "易", "domain": "Media（Music）", "expert_time": 1.0},
-    {"version": "3.0", "name": "bun-sourcemap-leak", "difficulty": "易", "domain": "Software（Systems）", "expert_time": 1.5},
-    {"version": "3.0", "name": "atrx-vep-crispr", "difficulty": "中", "domain": "Science（Biology）", "expert_time": 7.0},
-    {"version": "3.0", "name": "live-database-cutover", "difficulty": "中", "domain": "Software（Databases）", "expert_time": 8.0},
-    {"version": "3.0", "name": "fin-saccr-rwa", "difficulty": "中", "domain": "Operations（Finance）", "expert_time": 8.0},
-    {"version": "3.0", "name": "satb-audio-transcription", "difficulty": "中", "domain": "Media（Music）", "expert_time": 8.0},
-    {"version": "3.0", "name": "takens-embedding-lean", "difficulty": "难", "domain": "Science（Math）", "expert_time": 60.0},
-    {"version": "3.0", "name": "gpt2-codegolf", "difficulty": "难", "domain": "ML（Inference）", "expert_time": 40.0},
-    {"version": "3.0", "name": "retro-console-soc", "difficulty": "难", "domain": "Hardware（RTL）", "expert_time": 10.0},
-]
+def load_cases():
+    """Load case list from case_metadata.json. Only returns enabled cases."""
+    meta_path = MANIFEST_DIR / "case_metadata.json"
+    if not meta_path.exists():
+        log(f"ERROR: case_metadata.json not found at {meta_path}")
+        return []
+    with open(meta_path, "r", encoding="utf-8") as f:
+        metadata = json.load(f)
+    cases = []
+    for key, info in sorted(metadata.items()):
+        if not info.get("enabled", True):
+            continue
+        cases.append({
+            "version": info["version"],
+            "name": info["name"],
+            "difficulty": info.get("difficulty", ""),
+            "domain": info.get("domain", ""),
+        })
+    return cases
 
 
 def log(msg):
@@ -338,18 +322,22 @@ def main():
     agent_version = get_agent_version()
     start_ts = time.strftime("%Y-%m-%d %H:%M:%S")
     start_epoch = time.time()
+    cases = load_cases()
+    if not cases:
+        log("ERROR: no cases loaded from case_metadata.json")
+        sys.exit(1)
     manifest["_meta"] = {
         "model": model,
         "agent_version": agent_version,
         "start_time": start_ts,
         "start_epoch": start_epoch,
         "timeout_cap_sec": 3600,
-        "total_cases": len(CASES),
+        "total_cases": len(cases),
     }
     save_manifest(manifest)
-    log(f"Benchmark started: model={model}, agent_version={agent_version}, cases={len(CASES)}")
+    log(f"Benchmark started: model={model}, agent_version={agent_version}, cases={len(cases)}")
 
-    for idx, case in enumerate(CASES, 1):
+    for idx, case in enumerate(cases, 1):
         version = case["version"]
         name = case["name"]
         key = f"{version}/{name}"
@@ -361,10 +349,10 @@ def main():
 
         # skip if already completed in a previous run
         if key in manifest and manifest[key].get("reward") not in ("", "unknown"):
-            log(f"=== [{idx}/30] {key} already completed (reward={manifest[key].get('reward')}), skipping ===")
+            log(f"=== [{idx}/{len(cases)}] {key} already completed (reward={manifest[key].get('reward')}), skipping ===")
             continue
 
-        log(f"=== [{idx}/30] {key} ===")
+        log(f"=== [{idx}/{len(cases)}] {key} ===")
         start_time = time.time()
         item = {
             "order": idx,

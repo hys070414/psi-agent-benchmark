@@ -1,152 +1,212 @@
 {
-  "cobol-modernization": {
+  "2.1/cobol-modernization": {
     "version": "2.1",
+    "name": "cobol-modernization",
     "domain": "Software Engineering",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "fix-git": {
+  "2.1/fix-git": {
     "version": "2.1",
+    "name": "fix-git",
     "domain": "Software Engineering",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "overfull-hbox": {
+  "2.1/overfull-hbox": {
     "version": "2.1",
+    "name": "overfull-hbox",
     "domain": "Debugging",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "prove-plus-comm": {
+  "2.1/prove-plus-comm": {
     "version": "2.1",
+    "name": "prove-plus-comm",
     "domain": "Software Engineering",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "caffe-cifar-10": {
+  "2.1/caffe-cifar-10": {
     "version": "2.1",
+    "name": "caffe-cifar-10",
     "domain": "Machine Learning",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "chess-best-move": {
+  "2.1/chess-best-move": {
     "version": "2.1",
+    "name": "chess-best-move",
     "domain": "Games",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "largest-eigenval": {
+  "2.1/largest-eigenval": {
     "version": "2.1",
+    "name": "largest-eigenval",
     "domain": "Mathematics",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "crack-7z-hash": {
+  "2.1/crack-7z-hash": {
     "version": "2.1",
+    "name": "crack-7z-hash",
     "domain": "Security",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "filter-js-from-html": {
+  "2.1/filter-js-from-html": {
     "version": "2.1",
+    "name": "filter-js-from-html",
     "domain": "Security",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "polyglot-c-py": {
+  "2.1/polyglot-c-py": {
     "version": "2.1",
+    "name": "polyglot-c-py",
     "domain": "Software Engineering",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "db-wal-recovery": {
+  "2.1/db-wal-recovery": {
     "version": "2.1",
+    "name": "db-wal-recovery",
     "domain": "File Operations",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "rstan-to-pystan": {
+  "2.1/rstan-to-pystan": {
     "version": "2.1",
+    "name": "rstan-to-pystan",
     "domain": "Data Science",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "configure-git-webserver": {
+  "2.1/configure-git-webserver": {
     "version": "2.1",
+    "name": "configure-git-webserver",
     "domain": "System Administration",
-    "difficulty": "难"
+    "difficulty": "难",
+    "enabled": true
   },
-  "install-windows-3.11": {
+  "2.1/install-windows-3.11": {
     "version": "2.1",
+    "name": "install-windows-3.11",
     "domain": "System Administration",
-    "difficulty": "难"
+    "difficulty": "难",
+    "enabled": true
   },
-  "llm-inference-batching-scheduler": {
+  "2.1/llm-inference-batching-scheduler": {
     "version": "2.1",
+    "name": "llm-inference-batching-scheduler",
     "domain": "Machine Learning",
-    "difficulty": "难"
+    "difficulty": "难",
+    "enabled": true
   },
-  "foodstuff-beta-activity": {
+  "3.0/foodstuff-beta-activity": {
     "version": "3.0",
+    "name": "foodstuff-beta-activity",
     "domain": "Science（Chemistry）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "photonic-waveguide-routing": {
+  "3.0/photonic-waveguide-routing": {
     "version": "3.0",
+    "name": "photonic-waveguide-routing",
     "domain": "Software（Algorithms）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "vllm-deepseek-streaming": {
+  "3.0/vllm-deepseek-streaming": {
     "version": "3.0",
+    "name": "vllm-deepseek-streaming",
     "domain": "ML（Inference）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "medical-claims-processing": {
+  "3.0/medical-claims-processing": {
     "version": "3.0",
+    "name": "medical-claims-processing",
     "domain": "Operations（Claims）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "interleaved-vigenere": {
+  "3.0/interleaved-vigenere": {
     "version": "3.0",
+    "name": "interleaved-vigenere",
     "domain": "Security（Cryptography）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "freecad-platform-drawing": {
+  "3.0/freecad-platform-drawing": {
     "version": "3.0",
+    "name": "freecad-platform-drawing",
     "domain": "Hardware（CAD）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "music-harmony": {
+  "3.0/music-harmony": {
     "version": "3.0",
+    "name": "music-harmony",
     "domain": "Media（Music）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "bun-sourcemap-leak": {
+  "3.0/bun-sourcemap-leak": {
     "version": "3.0",
+    "name": "bun-sourcemap-leak",
     "domain": "Software（Systems）",
-    "difficulty": "易"
+    "difficulty": "易",
+    "enabled": true
   },
-  "atrx-vep-crispr": {
+  "3.0/atrx-vep-crispr": {
     "version": "3.0",
+    "name": "atrx-vep-crispr",
     "domain": "Science（Biology）",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "live-database-cutover": {
+  "3.0/live-database-cutover": {
     "version": "3.0",
+    "name": "live-database-cutover",
     "domain": "Software（Databases）",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "fin-saccr-rwa": {
+  "3.0/fin-saccr-rwa": {
     "version": "3.0",
+    "name": "fin-saccr-rwa",
     "domain": "Operations（Finance）",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "satb-audio-transcription": {
+  "3.0/satb-audio-transcription": {
     "version": "3.0",
+    "name": "satb-audio-transcription",
     "domain": "Media（Music）",
-    "difficulty": "中"
+    "difficulty": "中",
+    "enabled": true
   },
-  "takens-embedding-lean": {
+  "3.0/takens-embedding-lean": {
     "version": "3.0",
+    "name": "takens-embedding-lean",
     "domain": "Science（Math）",
-    "difficulty": "难"
+    "difficulty": "难",
+    "enabled": true
   },
-  "gpt2-codegolf": {
+  "3.0/gpt2-codegolf": {
     "version": "3.0",
+    "name": "gpt2-codegolf",
     "domain": "ML（Inference）",
-    "difficulty": "难"
+    "difficulty": "难",
+    "enabled": true
   },
-  "retro-console-soc": {
+  "3.0/retro-console-soc": {
     "version": "3.0",
+    "name": "retro-console-soc",
     "domain": "Hardware（RTL）",
-    "difficulty": "难"
+    "difficulty": "难",
+    "enabled": true
   }
 }
