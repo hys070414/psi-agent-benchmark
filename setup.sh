@@ -41,6 +41,10 @@ echo "[setup] psi-agent commit: $(cd "$PSI_DIR" && git rev-parse --short HEAD)"
 
 # ── 3. 部署脚本和配置到 psi-agent 目录 ──────────────────────────────────
 echo "[setup] deploying scripts to psi-agent..."
+# 安装 psi-agent 包（editable 模式，确保 import 可用）
+cd "$PSI_DIR"
+uv pip install -e . 2>/dev/null || pip install -e . 2>/dev/null || echo "[setup] WARNING: could not install psi-agent package"
+cd "$WORKDIR"
 
 cp "$WORKDIR/run_all_cases.py"   "$PSI_DIR/run_all_cases.py"
 cp "$WORKDIR/generate_report.py" "$PSI_DIR/generate_report.py"
@@ -59,7 +63,9 @@ chmod +x "$PSI_DIR/run_benchmark.sh"
 
 # 部署容器版 workspace — 工具通过 PSI_PILOT_CONTAINER env 操作 Docker 容器
 rm -rf "$PSI_DIR/examples/tb-pilot-workspace"
+rm -rf "$PSI_DIR/examples/tb-pilot-workspace"
 cp -r "$WORKDIR/tb-pilot-workspace" "$PSI_DIR/examples/tb-pilot-workspace"
+cp "$WORKDIR/src/container.py" "$PSI_DIR/src/container.py"
 echo "[setup] deployed container workspace to $PSI_DIR/examples/tb-pilot-workspace"
 
 # ── 4. 环境变量配置 ──────────────────────────────────────────────────────
