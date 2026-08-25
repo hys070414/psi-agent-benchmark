@@ -24,15 +24,26 @@ cp .env.example .env
 vim .env
 ```
 
-必填项：
+配置分两层，不要混在一起：
+
+**A. 本地客户端配置（本机跑 `trigger/fetch` 用，只管 SSH 连接）**
 
 | 变量 | 说明 |
 |------|------|
 | `TB_BENCH_HOST` | 评测服务器 IP |
 | `TB_BENCH_USER` | 评测服务器用户名 |
-| `TB_BENCH_PASSWORD` 或 `TB_BENCH_KEY` | 密码或 SSH 私钥路径 |
-| `TB_BENCH_WORKDIR` | 服务器工作目录 |
-| `PSI_AI_API_KEY` | DeepSeek API Key |
+| `TB_BENCH_PASSWORD` 或 `TB_BENCH_KEY` | 密码或 SSH 私钥**路径**（本机持有） |
+| `TB_BENCH_WORKDIR` | 服务器上的工作目录（如 `/root/psi-agent-benchmark`） |
+
+> 这些变量**只**被 `bin/trigger_benchmark.py` / `bin/fetch_report.py` 读取，用于 SSH 进服务器。
+> 本地 `.env` 不需要、也不会用到 DeepSeek Key——key 在服务器侧。
+
+**B. 服务器侧配置（评测真正执行处，DeepSeek Key 在这里）**
+
+`PSI_AI_API_KEY` 等大模型变量由**服务器上**的 `psi-agent/.env`（或服务器环境变量）提供，被 psi-agent 框架读取后注入到 agent 容器（`psi-agent/src/container.py`）。**只配在服务器，不要配进本地 `.env`。**
+
+> 任何人想用 `trigger/fetch`，只需自己机器上的本地 `.env` 配好 A 组（能 SSH 进服务器）即可；
+> DeepSeek Key 已留在服务器，与使用者本地无关。
 
 ### 3. 一键评测
 
