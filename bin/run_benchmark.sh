@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WORKDIR=${TB_BENCH_WORKDIR:-/root/haitun-tb}
+WORKDIR="${TB_BENCH_WORKDIR:-$HOME/psi-agent-benchmark}"
 PSI_DIR=$WORKDIR/psi-agent
 RESULTS_DIR=$WORKDIR/pilot_results
 MANIFEST_DIR=$WORKDIR/manifests
@@ -21,18 +21,18 @@ fi
 cd "$WORKDIR"
 
 # Optionally re-setup to ensure correct psi-agent version is checked out
-	if [ -f "./setup.sh" ]; then
-	    echo "[run_benchmark] running setup.sh to ensure psi-agent version $PSI_AGENT_REF"
-	    bash ./setup.sh
-	fi
-	
-	# Build Docker images if missing (skip if images already exist)
-	if [ -f "./build_images.sh" ]; then
-	    echo "[run_benchmark] building missing Docker images ..."
-	    bash ./build_images.sh
-	fi
-	
-	# Backup old manifest so previous runs are not lost
+if [ -f "./setup.sh" ]; then
+    echo "[run_benchmark] running setup.sh to ensure psi-agent version $PSI_AGENT_REF"
+    bash ./setup.sh
+fi
+
+# Build Docker images if missing (skip if images already exist)
+if [ -f "./build_images.sh" ]; then
+    echo "[run_benchmark] building missing Docker images ..."
+    bash ./build_images.sh
+fi
+
+# Backup old manifest so previous runs are not lost
 if [ -f "$MANIFEST_JSON" ]; then
     BACKUP="$MANIFEST_DIR/benchmark_manifest.${TIMESTAMP}.json"
     cp "$MANIFEST_JSON" "$BACKUP"

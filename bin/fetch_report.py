@@ -15,7 +15,7 @@ HOST = os.getenv("TB_BENCH_HOST", "152.42.223.183")
 USER = os.getenv("TB_BENCH_USER", "root")
 PASSWORD = os.getenv("TB_BENCH_PASSWORD", "")
 KEY_FILE = os.getenv("TB_BENCH_KEY", "")
-WORKDIR = os.getenv("TB_BENCH_WORKDIR", "/root/haitun-tb")
+WORKDIR = os.getenv("TB_BENCH_WORKDIR", f"{os.getenv('HOME', '/root')}/psi-agent-benchmark")
 LATEST_FILE = f"{WORKDIR}/pilot_results/LATEST_REPORT.txt"
 
 

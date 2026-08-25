@@ -6,7 +6,7 @@
 # ============================================================
 set -euo pipefail
 
-WORKDIR=${TB_BENCH_WORKDIR:-/root/haitun-tb}
+WORKDIR="${TB_BENCH_WORKDIR:-$HOME/psi-agent-benchmark}"
 TASKS_DIR="$WORKDIR/tasks"
 LOG_DIR="$WORKDIR/pilot_results"
 MANIFEST_DIR="$WORKDIR/manifests"

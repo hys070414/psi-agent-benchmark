@@ -7,7 +7,7 @@ import sys
 import time
 from pathlib import Path
 
-WORKDIR = Path(os.environ.get("TB_BENCH_WORKDIR", "/root/haitun-tb"))
+WORKDIR = Path(os.environ.get("TB_BENCH_WORKDIR", f"{os.environ.get('HOME', '/root')}/psi-agent-benchmark"))
 MANIFEST_JSON = WORKDIR / "manifests" / "benchmark_manifest.json"
 METADATA_JSON = WORKDIR / "manifests" / "case_metadata.json"
 RESULTS_DIR = WORKDIR / "pilot_results"
