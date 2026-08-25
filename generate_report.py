@@ -148,8 +148,9 @@ def render_group_table(cases, group_key, group_values, label):
     return lines
 
 
-def generate(output_path=None):
-    manifest = json.loads(read_text(MANIFEST_JSON, "{}"))
+def generate(output_path=None, manifest_path=None):
+    manifest_src = Path(manifest_path) if manifest_path else MANIFEST_JSON
+    manifest = json.loads(read_text(manifest_src, "{}"))
     metadata = json.loads(read_text(METADATA_JSON, "{}"))
     meta = manifest.pop("_meta", {}) if "_meta" in manifest else {}
 
@@ -286,10 +287,17 @@ def generate(output_path=None):
     else:
         output_path = Path(output_path)
     output_path.write_text(report, encoding="utf-8")
-    print(f"Report written to {output_path}")
+    # 仅打印裸路径，供 run_benchmark.sh / trigger_benchmark.py 解析下载
+    print(str(output_path))
     return output_path
 
 
 if __name__ == "__main__":
-    out = sys.argv[1] if len(sys.argv) > 1 else None
-    generate(out)
+    import argparse
+    parser = argparse.ArgumentParser(description="从 manifest 生成评测报告")
+    parser.add_argument("--out", default=None,
+                        help="输出 markdown 路径（默认：results 下时间戳命名）")
+    parser.add_argument("--manifest", default=None,
+                        help="manifest JSON 路径（默认：manifests/benchmark_manifest.json）")
+    args = parser.parse_args()
+    generate(args.out, manifest_path=args.manifest)

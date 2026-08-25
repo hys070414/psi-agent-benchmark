@@ -199,6 +199,9 @@ def wait_and_fetch(client, session):
             report_path = stdout.read().decode("utf-8", "ignore").strip()
             # 取最后一行（可能是多行输出）
             report_path = report_path.splitlines()[-1] if report_path else ""
+            # 兼容 generate_report.py 旧版可能输出 "Report written to <path>"
+            if "Report written to" in report_path:
+                report_path = report_path.split("Report written to")[-1].strip()
 
             if report_path and report_path.endswith(".md"):
                 print(f"\n[trigger] benchmark finished! report: {report_path}")

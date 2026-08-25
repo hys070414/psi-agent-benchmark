@@ -66,7 +66,7 @@ set -e
 cd $PSI_DIR
 echo '[run_benchmark] starting benchmark at \$(date)'
 python3 run_all_cases.py $CASE_ARGS
-REPORT=\$(python3 generate_report.py)
+REPORT=\$(python3 generate_report.py --out $RESULTS_DIR/benchmark_report_${TIMESTAMP}.md | tail -n1)
 echo \"\$REPORT\" > $RESULTS_DIR/LATEST_REPORT.txt
 echo '[run_benchmark] benchmark finished at \$(date); report:'
 echo \"\$REPORT\"

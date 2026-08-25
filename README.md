@@ -155,11 +155,54 @@ python3 run_all_cases.py --versions 3.0 --list
 
 ### 4. 查看报告
 
-报告自动下载到 `reports/` 目录，包含：
+跑评测用 `--wait` 时，脚本会**自动**等待评测完成、生成报告并下载到本地 `reports/` 目录：
+
+```bash
+python bin/trigger_benchmark.py --cases fix-git,caffe-cifar-10 --wait
+# 跑完后 reports/benchmark_report_*.md 即为本次报告
+```
+
+链路说明（评测结束 → 自动出报告 → 自动下载，无需人工干预）：
+
+1. `run_benchmark.sh` 在服务器 tmux 中跑 `run_all_cases.py`，随后调用 `generate_report.py`；
+2. `generate_report.py` 把报告写入 `pilot_results/benchmark_report_<时间戳>.md`，并把**裸路径**写入 `pilot_results/LATEST_REPORT.txt`；
+3. `trigger_benchmark.py --wait` 轮询 `LATEST_REPORT.txt`，读到 `.md` 路径后自动 SFTP 下载到本地 `reports/`。
+
+若评测已跑完、只想单独拉取最新报告：
+
+```bash
+python bin/fetch_report.py
+```
+
+报告包含：
 
 - 综合打分（完成数/总数、通过率、token 消耗、耗时）
-- 按版本/难度维度统计
+- 按版本/难度/领域维度统计
 - 每个 Case 的详细结果（状态、reward、请求数、token、日志片段）
+
+## 全无人值守（可选）
+
+如果希望**无需任何手动触发**就定期出报告，可在评测服务器上用 cron / systemd 定时跑 `run_benchmark.sh`。它所写出的 `LATEST_REPORT.txt` 即为本次报告路径，其他人可用 `python bin/fetch_report.py`（任意机器、配好 `.env`）随时拉取；或让服务器把报告发布到可访问的位置。
+
+**cron 示例（每天 06:00 跑一次）：**
+
+```cron
+0 6 * * * cd /root/psi-agent-benchmark && bash bin/run_benchmark.sh >> pilot_results/cron.log 2>&1
+```
+
+**一键无人值守 + 自动发布到仓库（可选）：**
+
+`bin/auto_bench.sh` 在 `run_benchmark.sh` 基础上，等报告生成后把最新报告复制进 `reports/`，并在提供 `GITHUB_TOKEN` 时推送到仓库的 `reports` 分支，这样他人无需登录服务器即可在 GitHub 上看到报告：
+
+```bash
+# 仅本地生成 + 写出 LATEST_REPORT.txt
+bash bin/auto_bench.sh
+
+# 额外把报告推送到仓库 reports 分支（他人可直接在 GitHub 查看）
+GITHUB_TOKEN=ghp_xxx bash bin/auto_bench.sh
+```
+
+> 注意：自动推送默认写到独立的 `reports` 分支，不会动 `main` 分支，避免覆盖你的代码。
 
 ## 自定义 Case 列表
 
