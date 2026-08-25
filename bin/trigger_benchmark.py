@@ -171,6 +171,11 @@ def trigger(client, branch, case_args=None):
 
     cmd = f"{prefix}{case_env}bash {REMOTE_RUNNER}"
     print(f"[trigger] running: {cmd}")
+    # 先清掉上一轮遗留的 LATEST_REPORT.txt，避免 wait_and_fetch 误把旧报告当成本轮结果
+    try:
+        client.exec_command(f"rm -f {LATEST_FILE} 2>/dev/null")
+    except Exception:
+        pass
     stdin, stdout, stderr = client.exec_command(cmd, timeout=60)
 
     out = stdout.read().decode("utf-8", "ignore")
@@ -191,6 +196,18 @@ def wait_and_fetch(client, session):
     print(f"\n[trigger] waiting for benchmark to finish (session: {session})...")
     print(f"[trigger] polling every {POLL_INTERVAL}s — press Ctrl+C to stop waiting")
 
+    # 记录本轮开始前已存在的报告文件，防止读到上一轮遗留的 LATEST_REPORT.txt 误判完成
+    initial_reports = set()
+    try:
+        stdin, stdout, stderr = client.exec_command(
+            f"ls {RESULTS_DIR}/benchmark_report_*.md 2>/dev/null", timeout=15
+        )
+        for line in stdout.read().decode("utf-8", "ignore").splitlines():
+            if line.strip():
+                initial_reports.add(line.strip())
+    except Exception:
+        pass
+
     while True:
         try:
             stdin, stdout, stderr = client.exec_command(
@@ -203,7 +220,8 @@ def wait_and_fetch(client, session):
             if "Report written to" in report_path:
                 report_path = report_path.split("Report written to")[-1].strip()
 
-            if report_path and report_path.endswith(".md"):
+            # 必须是一个本轮新产生的报告（不在初始集合里），否则可能是旧报告的残留
+            if report_path and report_path.endswith(".md") and report_path not in initial_reports:
                 print(f"\n[trigger] benchmark finished! report: {report_path}")
                 return download_report(client, report_path)
         except Exception:

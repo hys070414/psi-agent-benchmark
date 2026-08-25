@@ -9,6 +9,7 @@ skipped them and jumped straight to the detailed results).
 
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -40,6 +41,30 @@ def tail_lines(text, n):
     return "\n".join(lines[-n:]) if lines else ""
 
 
+USAGE_RE = re.compile(
+    r"Request completed successfully \| usage prompt_tokens=(\d+) completion_tokens=(\d+) total_tokens=(\d+)"
+)
+
+
+def parse_real_usage(case_name):
+    """从 ai.log 读取 psi-agent 记录的每次请求真实 usage。
+
+    仅当 ai/server.py 已打补丁（成功行带 '| usage ...'）时才有数据；否则返回 None。
+    """
+    ai_log = RESULTS_DIR / case_name / "ai.log"
+    text = read_text(ai_log, "")
+    inp = out = tot = 0
+    n = 0
+    for m in USAGE_RE.finditer(text):
+        inp += int(m.group(1))
+        out += int(m.group(2))
+        tot += int(m.group(3))
+        n += 1
+    if n == 0:
+        return None
+    return {"input_tokens": inp, "output_tokens": out, "total_tokens": tot, "usage_requests": n}
+
+
 def estimate_tokens(case_name):
     result_dir = RESULTS_DIR / case_name
     ai_log = result_dir / "ai.log"
@@ -54,6 +79,15 @@ def estimate_tokens(case_name):
     input_tokens = int(session_chars * requests / 2 / CHARS_PER_TOKEN) if requests else 0
     output_tokens = int(output_chars / CHARS_PER_TOKEN)
     total_tokens = input_tokens + output_tokens
+    token_source = "估算"
+
+    # 优先用 ai/server.py 记录的真实 usage（每次请求的 prompt/completion/total）
+    real = parse_real_usage(case_name)
+    if real is not None:
+        input_tokens = real["input_tokens"]
+        output_tokens = real["output_tokens"]
+        total_tokens = real["total_tokens"]
+        token_source = "实测"
 
     return {
         "requests": requests,
@@ -62,6 +96,7 @@ def estimate_tokens(case_name):
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
         "total_tokens": total_tokens,
+        "token_source": token_source,
     }
 
 
@@ -113,9 +148,10 @@ def build_summary_md(stats, meta):
         ("unknown case 数", str(stats["unknown_cases"])),
         ("总 reward", f'{stats["reward_sum"]:.2f} / {total}'),
         ("通过率", f"{pass_rate:.1f}%"),
-        ("估算输入 token", f'{stats["total_input_tokens"]:,}'),
-        ("估算输出 token", f'{stats["total_output_tokens"]:,}'),
-        ("估算总 token", f'{stats["total_tokens"]:,}'),
+        ("输入 token", f'{stats["total_input_tokens"]:,}'),
+        ("输出 token", f'{stats["total_output_tokens"]:,}'),
+        ("总 token", f'{stats["total_tokens"]:,}'),
+        ("token 来源", stats["token_source_label"]),
         ("API 请求数", f"{api_req:,}"),
         ("底层模型", f'`{meta.get("model", "unknown")}`'),
         ("Agent 版本", f'`{meta.get("agent_version", "unknown")}`'),
@@ -129,7 +165,7 @@ def build_summary_md(stats, meta):
 
 def render_group_table(cases, group_key, group_values, label):
     lines = []
-    lines.append(f"| {label} | 总数 | 通过 | 失败 | unknown | reward 和 | 估算总 token |")
+    lines.append(f"| {label} | 总数 | 通过 | 失败 | unknown | reward 和 | 总 token |")
     lines.append("| ---- | ----:| ----:| ----:| -------:| ---------:| -------------:|")
     for g_val in group_values:
         subset = [c for c in cases if c.get(group_key) == g_val]
@@ -178,6 +214,7 @@ def generate(output_path=None, manifest_path=None):
             "input_tokens": tokens["input_tokens"],
             "output_tokens": tokens["output_tokens"],
             "total_tokens": tokens["total_tokens"],
+            "token_source": tokens["token_source"],
             "result_dir": item.get("result_dir", str(RESULTS_DIR / name)),
         })
 
@@ -194,6 +231,14 @@ def generate(output_path=None, manifest_path=None):
     api_req = sum(c["requests"] for c in cases)
     elapsed = meta.get("elapsed_sec", sum(c["elapsed_sec"] for c in cases))
 
+    token_sources = set(c["token_source"] for c in cases)
+    if token_sources == {"实测"}:
+        token_source_label = "实测"
+    elif token_sources == {"估算"}:
+        token_source_label = "估算"
+    else:
+        token_source_label = "混合(实测+估算)"
+
     stats = {
         "total_cases": total_cases,
         "completed_cases": completed_cases,
@@ -205,6 +250,7 @@ def generate(output_path=None, manifest_path=None):
         "total_input_tokens": total_input_tokens,
         "total_output_tokens": total_output_tokens,
         "api_req": api_req,
+        "token_source_label": token_source_label,
     }
 
     lines = []
@@ -257,8 +303,9 @@ def generate(output_path=None, manifest_path=None):
     # 六、每个 case 的运行中间结果（折叠）
     lines.append("\n## 六、Case 运行中间结果\n")
     lines.append(
-        "以下按 case 展示最近日志片段，便于后续调优。输入 token 估算假设：未开启 compaction 时，"
-        "每轮 prompt 都包含完整历史，因此累计输入 ≈ session_chars × requests / 2 / 4。\n"
+        "以下按 case 展示最近日志片段，便于后续调优。token 优先采用各 case `ai.log` 中 psi-agent 记录的"
+        "**真实 usage**（每次 API 请求的 prompt/completion/total_tokens）；旧日志未记录 usage 时回退为估算"
+        "（假设未开 compaction、每轮 prompt 含完整历史，累计输入 ≈ session_chars × requests / 2 / 4）。\n"
     )
     for c in cases:
         result_dir = Path(c["result_dir"])
@@ -271,7 +318,7 @@ def generate(output_path=None, manifest_path=None):
 
         lines.append(f"\n### {c['order']:02d}. {c['version']}/{c['name']}\n")
         lines.append(f"- 状态：{c['agent_status']} | reward：{c['reward']} | 耗时：{format_elapsed(c['elapsed_sec'])}\n")
-        lines.append(f"- 请求数：{c['requests']} | 输入 token：{c['input_tokens']:,} | 输出 token：{c['output_tokens']:,} | 总 token：{c['total_tokens']:,}\n")
+        lines.append(f"- 请求数：{c['requests']} | 输入 token：{c['input_tokens']:,} ({c['token_source']}) | 输出 token：{c['output_tokens']:,} | 总 token：{c['total_tokens']:,}\n")
         lines.append("\n<details>\n<summary>session.log 最近 30 行</summary>\n\n```\n")
         lines.append(session_tail + "\n```\n\n</details>\n")
         lines.append("\n<details>\n<summary>agent_output.log 最近 30 行</summary>\n\n```\n")
