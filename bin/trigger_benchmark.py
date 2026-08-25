@@ -5,10 +5,15 @@
     python bin/trigger_benchmark.py                    # 仅触发，不等待
     python bin/trigger_benchmark.py --branch feature-x # 指定 psi-agent 分支
     python bin/trigger_benchmark.py --wait             # 触发后等待跑完，自动下载报告
+    python bin/trigger_benchmark.py --cases fix-git,caffe-cifar-10 --wait
+    python bin/trigger_benchmark.py --versions 2.1 --difficulties 易 --wait
+    python bin/trigger_benchmark.py --pick --wait      # 交互式选择 case 后触发
 """
 
 import argparse
+import json
 import os
+import shlex
 import sys
 import time
 from pathlib import Path
@@ -29,6 +34,104 @@ REMOTE_RUNNER = f"{WORKDIR}/psi-agent/run_benchmark.sh"
 RESULTS_DIR = f"{WORKDIR}/pilot_results"
 LATEST_FILE = f"{RESULTS_DIR}/LATEST_REPORT.txt"
 POLL_INTERVAL = 120  # 每 2 分钟检查一次
+LOCAL_CASE_METADATA = REPO_ROOT / "config" / "case_metadata.json"
+
+
+def pick_cases_locally():
+    """在本地交互式选择 case（按 TB 2.1 / 3.0 分组），返回选中的名称列表。
+
+    选择结果会作为 --cases 参数传给远程，远程按名称精确匹配。
+
+    Returns:
+        选中的 case 名称列表；放弃时返回 None。
+    """
+    if not LOCAL_CASE_METADATA.exists():
+        sys.exit(f"[trigger] error: case metadata not found: {LOCAL_CASE_METADATA}")
+    with open(LOCAL_CASE_METADATA, "r", encoding="utf-8") as f:
+        metadata = json.load(f)
+
+    # 按 version 分组，组内按名称排序
+    by_version = {}
+    for key, info in sorted(metadata.items()):
+        by_version.setdefault(info["version"], []).append((key, info))
+
+    numbered = []  # [(编号, key, info)]
+    print()
+    for version in sorted(by_version.keys()):
+        cases = by_version[version]
+        print(f"─── TB {version}（{len(cases)} 个）───")
+        for key, info in cases:
+            idx = len(numbered) + 1
+            numbered.append((idx, key, info))
+            flag = "" if info.get("enabled", True) else "  [已禁用]"
+            print(f"  {idx:>2}. {info['name']:<40} {info.get('difficulty', ''):<4} {info.get('domain', '')}{flag}")
+        print()
+
+    print("输入编号选择（示例: 1,3-5,12  或  2.1  或  3.0  或  a 全选，q 放弃）:")
+    while True:
+        try:
+            raw = input("> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n[pick] 已放弃选择")
+            return None
+        if not raw:
+            continue
+        if raw.lower() == "q":
+            print("[pick] 已放弃选择")
+            return None
+        if raw.lower() == "a":
+            selected_keys = {k for _, k, _ in numbered}
+        elif raw in by_version:
+            selected_keys = {k for k, _ in by_version[raw]}
+        else:
+            selected_keys = set()
+            ok = True
+            for part in raw.replace("，", ",").split(","):
+                part = part.strip()
+                if not part:
+                    continue
+                if "-" in part:
+                    lo, _, hi = part.partition("-")
+                    try:
+                        lo_i, hi_i = int(lo), int(hi)
+                    except ValueError:
+                        print(f"  无效范围: {part}")
+                        ok = False
+                        break
+                    if lo_i < 1 or hi_i > len(numbered) or lo_i > hi_i:
+                        print(f"  编号超出范围 1-{len(numbered)}: {part}")
+                        ok = False
+                        break
+                    for n in range(lo_i, hi_i + 1):
+                        selected_keys.add(numbered[n - 1][1])
+                else:
+                    try:
+                        n = int(part)
+                    except ValueError:
+                        print(f"  无效编号: {part}")
+                        ok = False
+                        break
+                    if n < 1 or n > len(numbered):
+                        print(f"  编号超出范围 1-{len(numbered)}: {n}")
+                        ok = False
+                        break
+                    selected_keys.add(numbered[n - 1][1])
+            if not ok or not selected_keys:
+                continue
+
+        names = [info["name"] for _, key, info in numbered if key in selected_keys]
+        print(f"\n[pick] 已选择 {len(names)} 个 case:")
+        for _, key, info in numbered:
+            if key in selected_keys:
+                print(f"  {key}")
+        try:
+            confirm = input("确认执行远程评测? [Y/n] ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print("\n[pick] 已放弃选择")
+            return None
+        if confirm in ("", "y", "yes"):
+            return names
+        print()
 
 
 def connect():
@@ -49,13 +152,24 @@ def connect():
     return client
 
 
-def trigger(client, branch):
-    """在服务器上触发 benchmark。"""
+def trigger(client, branch, case_args=None):
+    """在服务器上触发 benchmark。
+
+    Args:
+        client: paramiko SSHClient
+        branch: psi-agent Git 分支名，None 则用默认
+        case_args: 额外的 case 选择参数列表，如 ["--versions", "2.1", "--limit", "5"]
+    """
     prefix = ""
     if branch:
         prefix = f"PSI_AGENT_REF={branch} "
 
-    cmd = f"{prefix}bash {REMOTE_RUNNER}"
+    # 将 case 选择参数注入到远程命令
+    case_env = ""
+    if case_args:
+        case_env = f'TB_CASE_ARGS={shlex.quote(" ".join(case_args))} '
+
+    cmd = f"{prefix}{case_env}bash {REMOTE_RUNNER}"
     print(f"[trigger] running: {cmd}")
     stdin, stdout, stderr = client.exec_command(cmd, timeout=60)
 
@@ -123,18 +237,74 @@ def download_report(client, remote_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Trigger remote benchmark")
+    parser = argparse.ArgumentParser(
+        description="Trigger remote benchmark",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+示例:
+  # 跑所有 case
+  python bin/trigger_benchmark.py --wait
+
+  # 交互式选择：按 TB 2.1/3.0 分组列出，输入编号挑选
+  python bin/trigger_benchmark.py --pick --wait
+
+  # 只跑指定 case
+  python bin/trigger_benchmark.py --cases fix-git,caffe-cifar-10 --wait
+
+  # 只跑 2.1 版本
+  python bin/trigger_benchmark.py --versions 2.1 --wait
+
+  # 只跑容易的，最多 3 个
+  python bin/trigger_benchmark.py --difficulties 易 --limit 3 --wait
+""",
+    )
     parser.add_argument("--branch", default=None,
                         help="psi-agent Git branch/tag to test")
     parser.add_argument("--wait", action="store_true",
                         help="Wait for benchmark to finish and download report")
+    parser.add_argument("--cases", "-c", action="append", default=None, metavar="NAME[,NAME...]",
+                        help="精确指定 case 名称（逗号分隔），可多次使用")
+    parser.add_argument("--versions", "-v", default=None, metavar="V[,V...]",
+                        help="版本筛选，逗号分隔（如 2.1 或 2.1,3.0）")
+    parser.add_argument("--difficulties", "-d", default=None, metavar="D[,D...]",
+                        help="难度筛选，逗号分隔（如 易 或 易,中,难）")
+    parser.add_argument("--exclude", action="append", default=None, metavar="KEY",
+                        help="排除的 case key（如 2.1/fix-git），可多次使用")
+    parser.add_argument("--limit", "-n", type=int, default=None, metavar="N",
+                        help="最多运行的 case 数量")
+    parser.add_argument("--pick", "-p", action="store_true",
+                        help="本地交互式选择 case（按 TB 2.1/3.0 分组），选中后触发远程评测")
     args = parser.parse_args()
+
+    # 构建 case 选择参数，传递给远程 run_all_cases.py
+    case_args = []
+    if args.pick:
+        picked = pick_cases_locally()
+        if picked is None:
+            print("[trigger] 未选择任何 case，退出")
+            sys.exit(0)
+        if not picked:
+            print("[trigger] 选择的 case 为空，退出")
+            sys.exit(1)
+        case_args.extend(["--cases", ",".join(picked)])
+    if args.cases:
+        for chunk in args.cases:
+            case_args.extend(["--cases", chunk])
+    if args.versions:
+        case_args.extend(["--versions", args.versions])
+    if args.difficulties:
+        case_args.extend(["--difficulties", args.difficulties])
+    if args.exclude:
+        for ex in args.exclude:
+            case_args.extend(["--exclude", ex])
+    if args.limit is not None:
+        case_args.extend(["--limit", str(args.limit)])
 
     client = connect()
     print(f"[trigger] connected to {HOST}")
 
     try:
-        session = trigger(client, args.branch)
+        session = trigger(client, args.branch, case_args=case_args)
         if not session:
             print("[trigger] warning: could not detect tmux session")
         else:

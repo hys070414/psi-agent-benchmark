@@ -10,8 +10,16 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 TMUX_SESSION="tb-bench-${TIMESTAMP}"
 MANIFEST_JSON=$MANIFEST_DIR/benchmark_manifest.json
 
+# Case 选择参数（由 trigger_benchmark.py 通过环境变量注入，也可手动设置）
+# 例: TB_CASE_ARGS="--versions 2.1 --difficulties 易 --limit 3"
+#     TB_CASE_ARGS="--cases fix-git,caffe-cifar-10"
+CASE_ARGS="${TB_CASE_ARGS:-}"
+
 echo "[run_benchmark] workdir: $WORKDIR"
 echo "[run_benchmark] psi-agent ref: $PSI_AGENT_REF"
+if [ -n "$CASE_ARGS" ]; then
+    echo "[run_benchmark] case args: $CASE_ARGS"
+fi
 
 # Load .env if present
 if [ -f "$WORKDIR/.env" ]; then
@@ -49,7 +57,7 @@ if [ -f "$RESULTS_DIR/benchmark.log" ]; then
 fi
 
 # Build the tmux command:
-# 1. run all cases
+# 1. run all cases (with optional case selection args)
 # 2. generate the data-only report
 # 3. write the report path to a known marker file
 # 4. keep the session alive so logs can be inspected
@@ -57,7 +65,7 @@ TMUX_CMD="
 set -e
 cd $PSI_DIR
 echo '[run_benchmark] starting benchmark at \$(date)'
-python3 run_all_cases.py
+python3 run_all_cases.py $CASE_ARGS
 REPORT=\$(python3 generate_report.py)
 echo \"\$REPORT\" > $RESULTS_DIR/LATEST_REPORT.txt
 echo '[run_benchmark] benchmark finished at \$(date); report:'

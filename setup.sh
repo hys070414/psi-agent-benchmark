@@ -44,12 +44,15 @@ echo "[setup] deploying scripts to psi-agent..."
 
 cp "$WORKDIR/run_all_cases.py"   "$PSI_DIR/run_all_cases.py"
 cp "$WORKDIR/generate_report.py" "$PSI_DIR/generate_report.py"
+cp "$WORKDIR/fetch_cases.py"     "$PSI_DIR/fetch_cases.py"
 cp "$WORKDIR/build_images.sh"    "$PSI_DIR/build_images.sh"
 chmod +x "$PSI_DIR/build_images.sh"
 
 # 部署容器管理模块（复制到 psi-agent 的 src/，与 psi_agent/ 包共存）
 cp "$WORKDIR/src/container.py" "$PSI_DIR/src/container.py"
 echo "[setup] deployed container.py to $PSI_DIR/src/container.py"
+cp "$WORKDIR/src/case_source.py" "$PSI_DIR/src/case_source.py"
+echo "[setup] deployed case_source.py to $PSI_DIR/src/case_source.py"
 
 mkdir -p "$WORKDIR/manifests"
 cp "$WORKDIR/config/case_metadata.json" "$WORKDIR/manifests/case_metadata.json"

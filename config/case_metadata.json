@@ -1,31 +1,45 @@
 {
-  "2.1/cobol-modernization": {
+  "2.1/adaptive-rejection-sampler": {
     "version": "2.1",
-    "name": "cobol-modernization",
-    "domain": "Software Engineering",
-    "difficulty": "易",
-    "enabled": true
+    "name": "adaptive-rejection-sampler",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "2.1/fix-git": {
+  "2.1/bn-fit-modify": {
     "version": "2.1",
-    "name": "fix-git",
-    "domain": "Software Engineering",
-    "difficulty": "易",
-    "enabled": true
+    "name": "bn-fit-modify",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "2.1/overfull-hbox": {
+  "2.1/break-filter-js-from-html": {
     "version": "2.1",
-    "name": "overfull-hbox",
-    "domain": "Debugging",
-    "difficulty": "易",
-    "enabled": true
+    "name": "break-filter-js-from-html",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "2.1/prove-plus-comm": {
+  "2.1/build-cython-ext": {
     "version": "2.1",
-    "name": "prove-plus-comm",
-    "domain": "Software Engineering",
-    "difficulty": "易",
-    "enabled": true
+    "name": "build-cython-ext",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/build-pmars": {
+    "version": "2.1",
+    "name": "build-pmars",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/build-pov-ray": {
+    "version": "2.1",
+    "name": "build-pov-ray",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
   "2.1/caffe-cifar-10": {
     "version": "2.1",
@@ -34,6 +48,13 @@
     "difficulty": "中",
     "enabled": true
   },
+  "2.1/cancel-async-tasks": {
+    "version": "2.1",
+    "name": "cancel-async-tasks",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
   "2.1/chess-best-move": {
     "version": "2.1",
     "name": "chess-best-move",
@@ -41,47 +62,33 @@
     "difficulty": "中",
     "enabled": true
   },
-  "2.1/largest-eigenval": {
+  "2.1/circuit-fibsqrt": {
     "version": "2.1",
-    "name": "largest-eigenval",
-    "domain": "Mathematics",
-    "difficulty": "中",
-    "enabled": true
+    "name": "circuit-fibsqrt",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "2.1/crack-7z-hash": {
+  "2.1/cobol-modernization": {
     "version": "2.1",
-    "name": "crack-7z-hash",
-    "domain": "Security",
-    "difficulty": "中",
-    "enabled": true
-  },
-  "2.1/filter-js-from-html": {
-    "version": "2.1",
-    "name": "filter-js-from-html",
-    "domain": "Security",
-    "difficulty": "中",
-    "enabled": true
-  },
-  "2.1/polyglot-c-py": {
-    "version": "2.1",
-    "name": "polyglot-c-py",
+    "name": "cobol-modernization",
     "domain": "Software Engineering",
-    "difficulty": "中",
+    "difficulty": "易",
     "enabled": true
   },
-  "2.1/db-wal-recovery": {
+  "2.1/code-from-image": {
     "version": "2.1",
-    "name": "db-wal-recovery",
-    "domain": "File Operations",
-    "difficulty": "中",
-    "enabled": true
+    "name": "code-from-image",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "2.1/rstan-to-pystan": {
+  "2.1/compile-compcert": {
     "version": "2.1",
-    "name": "rstan-to-pystan",
-    "domain": "Data Science",
-    "difficulty": "中",
-    "enabled": true
+    "name": "compile-compcert",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
   "2.1/configure-git-webserver": {
     "version": "2.1",
@@ -90,11 +97,193 @@
     "difficulty": "难",
     "enabled": true
   },
+  "2.1/constraints-scheduling": {
+    "version": "2.1",
+    "name": "constraints-scheduling",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/count-dataset-tokens": {
+    "version": "2.1",
+    "name": "count-dataset-tokens",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/crack-7z-hash": {
+    "version": "2.1",
+    "name": "crack-7z-hash",
+    "domain": "Security",
+    "difficulty": "中",
+    "enabled": true
+  },
+  "2.1/custom-memory-heap-crash": {
+    "version": "2.1",
+    "name": "custom-memory-heap-crash",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/db-wal-recovery": {
+    "version": "2.1",
+    "name": "db-wal-recovery",
+    "domain": "File Operations",
+    "difficulty": "中",
+    "enabled": true
+  },
+  "2.1/distribution-search": {
+    "version": "2.1",
+    "name": "distribution-search",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/dna-assembly": {
+    "version": "2.1",
+    "name": "dna-assembly",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/dna-insert": {
+    "version": "2.1",
+    "name": "dna-insert",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/extract-elf": {
+    "version": "2.1",
+    "name": "extract-elf",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/extract-moves-from-video": {
+    "version": "2.1",
+    "name": "extract-moves-from-video",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/feal-differential-cryptanalysis": {
+    "version": "2.1",
+    "name": "feal-differential-cryptanalysis",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/feal-linear-cryptanalysis": {
+    "version": "2.1",
+    "name": "feal-linear-cryptanalysis",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/filter-js-from-html": {
+    "version": "2.1",
+    "name": "filter-js-from-html",
+    "domain": "Security",
+    "difficulty": "中",
+    "enabled": true
+  },
+  "2.1/financial-document-processor": {
+    "version": "2.1",
+    "name": "financial-document-processor",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/fix-code-vulnerability": {
+    "version": "2.1",
+    "name": "fix-code-vulnerability",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/fix-git": {
+    "version": "2.1",
+    "name": "fix-git",
+    "domain": "Software Engineering",
+    "difficulty": "易",
+    "enabled": true
+  },
+  "2.1/fix-ocaml-gc": {
+    "version": "2.1",
+    "name": "fix-ocaml-gc",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/gcode-to-text": {
+    "version": "2.1",
+    "name": "gcode-to-text",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/git-leak-recovery": {
+    "version": "2.1",
+    "name": "git-leak-recovery",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/git-multibranch": {
+    "version": "2.1",
+    "name": "git-multibranch",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/gpt2-codegolf": {
+    "version": "2.1",
+    "name": "gpt2-codegolf",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/headless-terminal": {
+    "version": "2.1",
+    "name": "headless-terminal",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/hf-model-inference": {
+    "version": "2.1",
+    "name": "hf-model-inference",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
   "2.1/install-windows-3.11": {
     "version": "2.1",
     "name": "install-windows-3.11",
     "domain": "System Administration",
     "difficulty": "难",
+    "enabled": true
+  },
+  "2.1/kv-store-grpc": {
+    "version": "2.1",
+    "name": "kv-store-grpc",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/large-scale-text-editing": {
+    "version": "2.1",
+    "name": "large-scale-text-editing",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/largest-eigenval": {
+    "version": "2.1",
+    "name": "largest-eigenval",
+    "domain": "Mathematics",
+    "difficulty": "中",
     "enabled": true
   },
   "2.1/llm-inference-batching-scheduler": {
@@ -104,61 +293,334 @@
     "difficulty": "难",
     "enabled": true
   },
-  "3.0/foodstuff-beta-activity": {
-    "version": "3.0",
-    "name": "foodstuff-beta-activity",
-    "domain": "Science（Chemistry）",
+  "2.1/log-summary-date-ranges": {
+    "version": "2.1",
+    "name": "log-summary-date-ranges",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/mailman": {
+    "version": "2.1",
+    "name": "mailman",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/make-doom-for-mips": {
+    "version": "2.1",
+    "name": "make-doom-for-mips",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/make-mips-interpreter": {
+    "version": "2.1",
+    "name": "make-mips-interpreter",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/mcmc-sampling-stan": {
+    "version": "2.1",
+    "name": "mcmc-sampling-stan",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/merge-diff-arc-agi-task": {
+    "version": "2.1",
+    "name": "merge-diff-arc-agi-task",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/model-extraction-relu-logits": {
+    "version": "2.1",
+    "name": "model-extraction-relu-logits",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/modernize-scientific-stack": {
+    "version": "2.1",
+    "name": "modernize-scientific-stack",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/mteb-leaderboard": {
+    "version": "2.1",
+    "name": "mteb-leaderboard",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/mteb-retrieve": {
+    "version": "2.1",
+    "name": "mteb-retrieve",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/multi-source-data-merger": {
+    "version": "2.1",
+    "name": "multi-source-data-merger",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/nginx-request-logging": {
+    "version": "2.1",
+    "name": "nginx-request-logging",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/openssl-selfsigned-cert": {
+    "version": "2.1",
+    "name": "openssl-selfsigned-cert",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/overfull-hbox": {
+    "version": "2.1",
+    "name": "overfull-hbox",
+    "domain": "Debugging",
     "difficulty": "易",
     "enabled": true
   },
-  "3.0/photonic-waveguide-routing": {
-    "version": "3.0",
-    "name": "photonic-waveguide-routing",
-    "domain": "Software（Algorithms）",
+  "2.1/password-recovery": {
+    "version": "2.1",
+    "name": "password-recovery",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/path-tracing": {
+    "version": "2.1",
+    "name": "path-tracing",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/path-tracing-reverse": {
+    "version": "2.1",
+    "name": "path-tracing-reverse",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/polyglot-c-py": {
+    "version": "2.1",
+    "name": "polyglot-c-py",
+    "domain": "Software Engineering",
+    "difficulty": "中",
+    "enabled": true
+  },
+  "2.1/polyglot-rust-c": {
+    "version": "2.1",
+    "name": "polyglot-rust-c",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/portfolio-optimization": {
+    "version": "2.1",
+    "name": "portfolio-optimization",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/protein-assembly": {
+    "version": "2.1",
+    "name": "protein-assembly",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/prove-plus-comm": {
+    "version": "2.1",
+    "name": "prove-plus-comm",
+    "domain": "Software Engineering",
     "difficulty": "易",
     "enabled": true
   },
-  "3.0/vllm-deepseek-streaming": {
-    "version": "3.0",
-    "name": "vllm-deepseek-streaming",
-    "domain": "ML（Inference）",
-    "difficulty": "易",
+  "2.1/pypi-server": {
+    "version": "2.1",
+    "name": "pypi-server",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/pytorch-model-cli": {
+    "version": "2.1",
+    "name": "pytorch-model-cli",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/pytorch-model-recovery": {
+    "version": "2.1",
+    "name": "pytorch-model-recovery",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/qemu-alpine-ssh": {
+    "version": "2.1",
+    "name": "qemu-alpine-ssh",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/qemu-startup": {
+    "version": "2.1",
+    "name": "qemu-startup",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/query-optimize": {
+    "version": "2.1",
+    "name": "query-optimize",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/raman-fitting": {
+    "version": "2.1",
+    "name": "raman-fitting",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/regex-chess": {
+    "version": "2.1",
+    "name": "regex-chess",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/regex-log": {
+    "version": "2.1",
+    "name": "regex-log",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/reshard-c4-data": {
+    "version": "2.1",
+    "name": "reshard-c4-data",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/rstan-to-pystan": {
+    "version": "2.1",
+    "name": "rstan-to-pystan",
+    "domain": "Data Science",
+    "difficulty": "中",
     "enabled": true
   },
-  "3.0/medical-claims-processing": {
-    "version": "3.0",
-    "name": "medical-claims-processing",
-    "domain": "Operations（Claims）",
-    "difficulty": "易",
-    "enabled": true
+  "2.1/sam-cell-seg": {
+    "version": "2.1",
+    "name": "sam-cell-seg",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "3.0/interleaved-vigenere": {
-    "version": "3.0",
-    "name": "interleaved-vigenere",
-    "domain": "Security（Cryptography）",
-    "difficulty": "易",
-    "enabled": true
+  "2.1/sanitize-git-repo": {
+    "version": "2.1",
+    "name": "sanitize-git-repo",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "3.0/freecad-platform-drawing": {
-    "version": "3.0",
-    "name": "freecad-platform-drawing",
-    "domain": "Hardware（CAD）",
-    "difficulty": "易",
-    "enabled": true
+  "2.1/schemelike-metacircular-eval": {
+    "version": "2.1",
+    "name": "schemelike-metacircular-eval",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "3.0/music-harmony": {
-    "version": "3.0",
-    "name": "music-harmony",
-    "domain": "Media（Music）",
-    "difficulty": "易",
-    "enabled": true
+  "2.1/sparql-university": {
+    "version": "2.1",
+    "name": "sparql-university",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
-  "3.0/bun-sourcemap-leak": {
-    "version": "3.0",
-    "name": "bun-sourcemap-leak",
-    "domain": "Software（Systems）",
-    "difficulty": "易",
-    "enabled": true
+  "2.1/sqlite-db-truncate": {
+    "version": "2.1",
+    "name": "sqlite-db-truncate",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/sqlite-with-gcov": {
+    "version": "2.1",
+    "name": "sqlite-with-gcov",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/torch-pipeline-parallelism": {
+    "version": "2.1",
+    "name": "torch-pipeline-parallelism",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/torch-tensor-parallelism": {
+    "version": "2.1",
+    "name": "torch-tensor-parallelism",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/train-fasttext": {
+    "version": "2.1",
+    "name": "train-fasttext",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/tune-mjcf": {
+    "version": "2.1",
+    "name": "tune-mjcf",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/video-processing": {
+    "version": "2.1",
+    "name": "video-processing",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/vulnerable-secret": {
+    "version": "2.1",
+    "name": "vulnerable-secret",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/winning-avg-corewars": {
+    "version": "2.1",
+    "name": "winning-avg-corewars",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "2.1/write-compressor": {
+    "version": "2.1",
+    "name": "write-compressor",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
   "3.0/atrx-vep-crispr": {
     "version": "3.0",
@@ -167,12 +629,103 @@
     "difficulty": "中",
     "enabled": true
   },
-  "3.0/live-database-cutover": {
+  "3.0/batched-eval-parity": {
     "version": "3.0",
-    "name": "live-database-cutover",
-    "domain": "Software（Databases）",
-    "difficulty": "中",
+    "name": "batched-eval-parity",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/biped-contact-dynamics": {
+    "version": "3.0",
+    "name": "biped-contact-dynamics",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/bun-sourcemap-leak": {
+    "version": "3.0",
+    "name": "bun-sourcemap-leak",
+    "domain": "Software（Systems）",
+    "difficulty": "易",
     "enabled": true
+  },
+  "3.0/cad-model": {
+    "version": "3.0",
+    "name": "cad-model",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/cargo-flight-dispatch": {
+    "version": "3.0",
+    "name": "cargo-flight-dispatch",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/cli-2ph-simplex": {
+    "version": "3.0",
+    "name": "cli-2ph-simplex",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/coq-block-bound": {
+    "version": "3.0",
+    "name": "coq-block-bound",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/ctr-optimization": {
+    "version": "3.0",
+    "name": "ctr-optimization",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/cumulative-layout-shift": {
+    "version": "3.0",
+    "name": "cumulative-layout-shift",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/data-anonymization": {
+    "version": "3.0",
+    "name": "data-anonymization",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/distributed-dedup": {
+    "version": "3.0",
+    "name": "distributed-dedup",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/embedding-drift-monitor": {
+    "version": "3.0",
+    "name": "embedding-drift-monitor",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/erp-procurement-planning": {
+    "version": "3.0",
+    "name": "erp-procurement-planning",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/exam-pdf-eval": {
+    "version": "3.0",
+    "name": "exam-pdf-eval",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
   "3.0/fin-saccr-rwa": {
     "version": "3.0",
@@ -181,19 +734,68 @@
     "difficulty": "中",
     "enabled": true
   },
-  "3.0/satb-audio-transcription": {
+  "3.0/fix-uautomizer-soundness": {
     "version": "3.0",
-    "name": "satb-audio-transcription",
-    "domain": "Media（Music）",
-    "difficulty": "中",
+    "name": "fix-uautomizer-soundness",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/foodstuff-beta-activity": {
+    "version": "3.0",
+    "name": "foodstuff-beta-activity",
+    "domain": "Science（Chemistry）",
+    "difficulty": "易",
     "enabled": true
   },
-  "3.0/takens-embedding-lean": {
+  "3.0/formal-crypto": {
     "version": "3.0",
-    "name": "takens-embedding-lean",
-    "domain": "Science（Math）",
-    "difficulty": "难",
+    "name": "formal-crypto",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/fp8-rmsnorm-gemm": {
+    "version": "3.0",
+    "name": "fp8-rmsnorm-gemm",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/freecad-impeller": {
+    "version": "3.0",
+    "name": "freecad-impeller",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/freecad-platform-drawing": {
+    "version": "3.0",
+    "name": "freecad-platform-drawing",
+    "domain": "Hardware（CAD）",
+    "difficulty": "易",
     "enabled": true
+  },
+  "3.0/freecad-spring-clip": {
+    "version": "3.0",
+    "name": "freecad-spring-clip",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/freight-dispatch-shift": {
+    "version": "3.0",
+    "name": "freight-dispatch-shift",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/glycan-ms2-elucidation": {
+    "version": "3.0",
+    "name": "glycan-ms2-elucidation",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   },
   "3.0/gpt2-codegolf": {
     "version": "3.0",
@@ -202,11 +804,340 @@
     "difficulty": "难",
     "enabled": true
   },
+  "3.0/gsea-proteomics": {
+    "version": "3.0",
+    "name": "gsea-proteomics",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/heat-pump-warranty": {
+    "version": "3.0",
+    "name": "heat-pump-warranty",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/hof-topology-interpenetration": {
+    "version": "3.0",
+    "name": "hof-topology-interpenetration",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/html-js-filter": {
+    "version": "3.0",
+    "name": "html-js-filter",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/ico-path-patch": {
+    "version": "3.0",
+    "name": "ico-path-patch",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/interleaved-vigenere": {
+    "version": "3.0",
+    "name": "interleaved-vigenere",
+    "domain": "Security（Cryptography）",
+    "difficulty": "易",
+    "enabled": true
+  },
+  "3.0/intrastat-meldung": {
+    "version": "3.0",
+    "name": "intrastat-meldung",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/jax-speedrun-gpu": {
+    "version": "3.0",
+    "name": "jax-speedrun-gpu",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/ks-solver-cpp": {
+    "version": "3.0",
+    "name": "ks-solver-cpp",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/kv-live-surgery": {
+    "version": "3.0",
+    "name": "kv-live-surgery",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/lake-temp-glm": {
+    "version": "3.0",
+    "name": "lake-temp-glm",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/layout-config-recreation": {
+    "version": "3.0",
+    "name": "layout-config-recreation",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/layout-config-recreation2": {
+    "version": "3.0",
+    "name": "layout-config-recreation2",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/lean-midpoint-proof": {
+    "version": "3.0",
+    "name": "lean-midpoint-proof",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/legacy-utility-triage": {
+    "version": "3.0",
+    "name": "legacy-utility-triage",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/live-database-cutover": {
+    "version": "3.0",
+    "name": "live-database-cutover",
+    "domain": "Software（Databases）",
+    "difficulty": "中",
+    "enabled": true
+  },
+  "3.0/math-eval-grader": {
+    "version": "3.0",
+    "name": "math-eval-grader",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/medical-claims-processing": {
+    "version": "3.0",
+    "name": "medical-claims-processing",
+    "domain": "Operations（Claims）",
+    "difficulty": "易",
+    "enabled": true
+  },
+  "3.0/memcached-backdoor": {
+    "version": "3.0",
+    "name": "memcached-backdoor",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/mp-checkpoint-consolidation": {
+    "version": "3.0",
+    "name": "mp-checkpoint-consolidation",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/music-harmony": {
+    "version": "3.0",
+    "name": "music-harmony",
+    "domain": "Media（Music）",
+    "difficulty": "易",
+    "enabled": true
+  },
+  "3.0/mvcc-lsm-compaction": {
+    "version": "3.0",
+    "name": "mvcc-lsm-compaction",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/nextjs-performance": {
+    "version": "3.0",
+    "name": "nextjs-performance",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/ontology-kg-querying": {
+    "version": "3.0",
+    "name": "ontology-kg-querying",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/payments-pipeline-fix": {
+    "version": "3.0",
+    "name": "payments-pipeline-fix",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/photonic-waveguide-routing": {
+    "version": "3.0",
+    "name": "photonic-waveguide-routing",
+    "domain": "Software（Algorithms）",
+    "difficulty": "易",
+    "enabled": true
+  },
+  "3.0/pretrain-shard-corruption": {
+    "version": "3.0",
+    "name": "pretrain-shard-corruption",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/production-planning": {
+    "version": "3.0",
+    "name": "production-planning",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/protein-autointerp-disulfide": {
+    "version": "3.0",
+    "name": "protein-autointerp-disulfide",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/react-lead-form": {
+    "version": "3.0",
+    "name": "react-lead-form",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
   "3.0/retro-console-soc": {
     "version": "3.0",
     "name": "retro-console-soc",
     "domain": "Hardware（RTL）",
     "difficulty": "难",
     "enabled": true
+  },
+  "3.0/risk-scorer-replay": {
+    "version": "3.0",
+    "name": "risk-scorer-replay",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/roy-polymorph-cn": {
+    "version": "3.0",
+    "name": "roy-polymorph-cn",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/rs-archive-clone": {
+    "version": "3.0",
+    "name": "rs-archive-clone",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/satb-audio-transcription": {
+    "version": "3.0",
+    "name": "satb-audio-transcription",
+    "domain": "Media（Music）",
+    "difficulty": "中",
+    "enabled": true
+  },
+  "3.0/session-window-debug": {
+    "version": "3.0",
+    "name": "session-window-debug",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/sglang-qwen-burst": {
+    "version": "3.0",
+    "name": "sglang-qwen-burst",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/shadow-relay": {
+    "version": "3.0",
+    "name": "shadow-relay",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/sound-change-cascade": {
+    "version": "3.0",
+    "name": "sound-change-cascade",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/takens-embedding-lean": {
+    "version": "3.0",
+    "name": "takens-embedding-lean",
+    "domain": "Science（Math）",
+    "difficulty": "难",
+    "enabled": true
+  },
+  "3.0/telecom-entity-resolution": {
+    "version": "3.0",
+    "name": "telecom-entity-resolution",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/uefi-bootkit": {
+    "version": "3.0",
+    "name": "uefi-bootkit",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/vba-userform-port": {
+    "version": "3.0",
+    "name": "vba-userform-port",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/vf2-speedup-networkx": {
+    "version": "3.0",
+    "name": "vf2-speedup-networkx",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/vllm-deepseek-streaming": {
+    "version": "3.0",
+    "name": "vllm-deepseek-streaming",
+    "domain": "ML（Inference）",
+    "difficulty": "易",
+    "enabled": true
+  },
+  "3.0/vpp-loss-divergence": {
+    "version": "3.0",
+    "name": "vpp-loss-divergence",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/wal-recovery-ordering": {
+    "version": "3.0",
+    "name": "wal-recovery-ordering",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
+  },
+  "3.0/wdm-design": {
+    "version": "3.0",
+    "name": "wdm-design",
+    "domain": "",
+    "difficulty": "",
+    "enabled": false
   }
 }
