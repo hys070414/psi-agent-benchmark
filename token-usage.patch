@@ -1,0 +1,29 @@
+diff --git a/src/psi_agent/ai/server.py b/src/psi_agent/ai/server.py
+index bdd80f34..26c30665 100644
+--- a/src/psi_agent/ai/server.py
++++ b/src/psi_agent/ai/server.py
+@@ -150,7 +150,11 @@ async def handle_chat_completions(request: web.Request) -> web.StreamResponse:
+         logger.debug("Starting to consume upstream SSE stream")
+         max_context_tokens: int = request.app.get("max_context_tokens", 0)
+         compaction_usage: dict[str, int] = {}
++        # 累积最后一个 chunk 的真实 usage（include_usage=True 时 usage 在末块）
++        final_usage = None
+         async for chunk in stream:
++            if chunk.usage is not None:
++                final_usage = chunk.usage
+             if max_context_tokens > 0 and chunk.usage and chunk.usage.prompt_tokens > max_context_tokens:
+                 compaction_needed = True
+                 compaction_usage = {
+@@ -212,5 +216,11 @@ async def handle_chat_completions(request: web.Request) -> web.StreamResponse:
+     elif upstream_error:
+         logger.info("Request completed with upstream error")
+     else:
+-        logger.info("Request completed successfully")
++        if final_usage is not None:
++            logger.info(
++                f"Request completed successfully | usage prompt_tokens={final_usage.prompt_tokens} "
++                f"completion_tokens={final_usage.completion_tokens} total_tokens={final_usage.total_tokens}"
++            )
++        else:
++            logger.info("Request completed successfully")
+     return response

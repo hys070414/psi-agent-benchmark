@@ -64,6 +64,14 @@ fi
 TMUX_CMD="
 set -e
 cd $PSI_DIR
+# 自动重打 token-usage 补丁（幂等）：让报告显示真实 token 用量，抗 psi-agent 仓库 reset/pull 覆盖
+PATCH=\"$WORKDIR/token-usage.patch\"
+if [ -f \"\$PATCH\" ] && git -C \"$PSI_DIR\" apply --check \"\$PATCH\" 2>/dev/null; then
+    git -C \"$PSI_DIR\" apply \"\$PATCH\"
+    echo '[run_benchmark] applied token-usage patch to psi-agent'
+elif [ -f \"\$PATCH\" ]; then
+    echo '[run_benchmark] token-usage patch already applied or not applicable; skipping'
+fi
 echo '[run_benchmark] starting benchmark at \$(date)'
 python3 run_all_cases.py $CASE_ARGS
 REPORT=\$(python3 generate_report.py --out $RESULTS_DIR/benchmark_report_${TIMESTAMP}.md | tail -n1)
