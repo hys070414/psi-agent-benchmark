@@ -138,61 +138,62 @@ def generate(output_path=None):
     lines.append(f"> 总耗时：{format_elapsed(elapsed)}\n")
     lines.append("\n---\n")
 
-    # 1. 综合打分
-    lines.append("\n## 一、综合打分\n")
-    lines.append("| 指标 | 数值 |")
-    lines.append("| ---- | ---- |")
-    lines.append(f"| 完成 case 数 / 总数 | {completed_cases} / {total_cases} |")
-    lines.append(f"| 通过 case 数（reward=1） | {pass_cases} |")
-    lines.append(f"| 失败 case 数 | {fail_cases} |")
-    lines.append(f"| unknown case 数 | {unknown_cases} |")
-    lines.append(f"| 总 reward | {reward_sum:.2f} / {total_cases} |")
-    lines.append(f"| 通过率 | {pass_cases / total_cases * 100:.1f}% |")
-    lines.append(f"| 估算输入 token | {total_input_tokens:,} |")
-    lines.append(f"| 估算输出 token | {total_output_tokens:,} |")
-    lines.append(f"| 估算总 token | {total_tokens:,} |")
-    lines.append(f"| API 请求数 | {sum(c['requests'] for c in cases):,} |")
-    lines.append(f"| 底层模型 | `{meta.get('model', 'unknown')}` |")
-    lines.append(f"| Agent 版本 | `{meta.get('agent_version', 'unknown')}` |")
-    lines.append("\n")
+    # 综合打分
+def build_summary_md(stats: dict, meta: dict, cases: list):
+    """根据统计指标生成markdown报告片段"""
+    total = stats["total_cases"]
+    pass_rate = stats["pass_cases"] / total * 100 if total > 0 else 0.0
+    api_req = sum(c["requests"] for c in cases)
 
-    # 2. 按版本维度
-    lines.append("\n## 二、按版本维度\n")
+    table_data = [
+        ("完成 case 数 / 总数", f'{stats["completed_cases"]} / {total}'),
+        ("通过 case 数 (reward=1)", str(stats["pass_cases"])),
+        ("失败 case 数", str(stats["fail_cases"])),
+        ("unknown case 数", str(stats["unknown_cases"])),
+        ("总 reward", f'{stats["reward_sum"]:.2f} / {total}'),
+        ("通过率", f"{pass_rate:.1f}%"),
+        ("估算输入 token", f'{stats["total_input_tokens"]:,}'),
+        ("估算输出 token", f'{stats["total_output_tokens"]:,}'),
+        ("估算总 token", f'{stats["total_tokens"]:,}'),
+        ("API 请求数", f"{api_req:,}"),
+        ("底层模型", f'`{meta.get("model", "unknown")}`'),
+        ("Agent 版本", f'`{meta.get("agent_version", "unknown")}`'),
+    ]
+    lines = ["\n## 一、综合打分\n", "| 指标 | 数值 |", "| ---- | ---- |"]
+    for title, value in table_data:
+        lines.append(f"| {title} | {value} |")
+    lines.append("\n")
+    return lines
+#版本、难度、领域分组
+    def render_group_table(cases: list, group_key: str, group_values: list[str]) -> list[str]:
+    """
+    通用分组统计表格：用于版本、难度、领域分组
+    group_key: case字典的分组key，如 "version" / "difficulty" / "domain"
+    group_values: 需要遍历的分组值列表
+    返回 lines 字符串列表
+    """
+    lines = []
     lines.append("| 版本 | 总数 | 通过 | 失败 | unknown | reward 和 | 估算总 token |")
     lines.append("| ---- | ----:| ----:| ----:| -------:| ---------:| -------------:|")
-    for version in ["2.1", "3.0"]:
-        subset = [c for c in cases if c["version"] == version]
+    for g_val in group_values:
+        subset = [c for c in cases if c.get(group_key) == g_val]
         if not subset:
             continue
+        total = len(subset)
+        pass_cnt = sum(is_pass(c["reward"]) for c in subset)
+        fail_cnt = sum(is_fail(c["reward"]) for c in subset)
+        unk_cnt = sum(is_unknown(c["reward"]) for c in subset)
+        reward_sum = sum(reward_value(c["reward"]) or 0.0 for c in subset)
+        token_sum = sum(c.get("total_tokens",0) for c in subset)
         lines.append(
-            f"| {version} | {len(subset)} | "
-            f"{sum(is_pass(c['reward']) for c in subset)} | "
-            f"{sum(is_fail(c['reward']) for c in subset)} | "
-            f"{sum(is_unknown(c['reward']) for c in subset)} | "
-            f"{sum(reward_value(c['reward']) or 0.0 for c in subset):.2f} | "
-            f"{sum(c['total_tokens'] for c in subset):,} |"
+            f"| {g_val} | {total} | {pass_cnt} | {fail_cnt} | {unk_cnt} | {reward_sum:.2f} | {token_sum:,} |"
         )
     lines.append("\n")
+    return lines
 
-    # 3. 按难度维度
-    lines.append("\n## 三、按难度维度\n")
-    lines.append("| 难度 | 总数 | 通过 | 失败 | unknown | reward 和 | 估算总 token |")
-    lines.append("| ---- | ----:| ----:| ----:| -------:| ---------:| -------------:|")
-    for diff in ["易", "中", "难"]:
-        subset = [c for c in cases if c["difficulty"] == diff]
-        if not subset:
-            continue
-        lines.append(
-            f"| {diff} | {len(subset)} | "
-            f"{sum(is_pass(c['reward']) for c in subset)} | "
-            f"{sum(is_fail(c['reward']) for c in subset)} | "
-            f"{sum(is_unknown(c['reward']) for c in subset)} | "
-            f"{sum(reward_value(c['reward']) or 0.0 for c in subset):.2f} | "
-            f"{sum(c['total_tokens'] for c in subset):,} |"
-        )
-    lines.append("\n")
+   
 
-    # 4. 详细结果（含中间日志）
+    #详细结果（含中间日志）
     lines.append("\n## 四、详细结果\n")
     lines.append("| # | 版本 | 任务名 | 领域 | 难度 | 状态 | reward | 耗时 | 请求数 | 输入 token | 输出 token | 总 token | 日志 |")
     lines.append("|---|------|--------|------|------|------|--------|------|--------|------------|------------|----------|------|")
@@ -211,7 +212,7 @@ def generate(output_path=None):
         )
     lines.append("\n")
 
-    # 5. 每个 case 的运行中间结果（折叠）
+    # 每个 case 的运行中间结果（折叠）
     lines.append("\n## 五、Case 运行中间结果\n")
     lines.append(
         "以下按 case 展示最近日志片段，便于后续调优。输入 token 估算假设：未开启 compaction 时，"
