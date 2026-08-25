@@ -32,7 +32,8 @@ from src.container import (
     start_env_container, build_verifier_image, run_agent, run_verifier,
     cleanup_container,
 )
-from src.case_source import refresh_case_metadata
+# 注意：case_source 仅在使用 --refresh 时需要，改为惰性导入，
+# 避免在没有部署 src/case_source.py 的环境（如仅运行 --cases）下因 ImportError 启动失败。
 
 # ── 全局路径 ───────────────────────────────────────────────────────────────
 WORKDIR = Path(os.environ.get(
@@ -465,6 +466,7 @@ def main():
 
     # 运行前从官网刷新候选池（--refresh）
     if args.refresh:
+        from src.case_source import refresh_case_metadata
         meta_path = MANIFEST_DIR / "case_metadata.json"
         token = os.environ.get("GITHUB_TOKEN")
         try:
