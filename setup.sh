@@ -47,10 +47,9 @@ cp "$WORKDIR/generate_report.py" "$PSI_DIR/generate_report.py"
 cp "$WORKDIR/build_images.sh"    "$PSI_DIR/build_images.sh"
 chmod +x "$PSI_DIR/build_images.sh"
 
-# 部署 Python 模块（src/）
-rm -rf "$PSI_DIR/src"
-cp -r "$WORKDIR/src" "$PSI_DIR/src"
-echo "[setup] deployed Python modules to $PSI_DIR/src"
+# 部署容器管理模块（复制到 psi-agent 的 src/，与 psi_agent/ 包共存）
+cp "$WORKDIR/src/container.py" "$PSI_DIR/src/container.py"
+echo "[setup] deployed container.py to $PSI_DIR/src/container.py"
 
 mkdir -p "$WORKDIR/manifests"
 cp "$WORKDIR/config/case_metadata.json" "$WORKDIR/manifests/case_metadata.json"
