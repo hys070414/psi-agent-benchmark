@@ -1,63 +1,50 @@
-"""Write tool — create or overwrite a file inside the task container."""
+"""Write tool — create or overwrite a file locally inside the task container.
+
+When the agent runs INSIDE the container, the write lands directly on the
+container filesystem — which is exactly what the verifier will inspect.
+No shell escaping is ever needed because content is written via the
+Python io module directly, not through a shell heredoc.
+"""
 
 from __future__ import annotations
 
 import asyncio
 import os
-import shlex
+from pathlib import Path
 
 
-def _container() -> str:
-    return os.environ.get("PSI_PILOT_CONTAINER", "")
-
-
-def _resolve(path: str) -> str:
+def _resolve(path: str, workdir: str = "/app") -> str:
     if path.startswith("/"):
         return path
-    return f"/app/{path}"
+    return os.path.join(workdir, path)
 
 
 async def write(file_path: str, content: str) -> str:
-    """Create or overwrite a file inside the task container.
+    """Create or overwrite a file locally (inside the container).
 
     Args:
         file_path: Path to the file (absolute, or relative to /app).
-        content: The exact content to write.
+        content: The exact content to write (utf-8).
 
     Returns:
         Success or error message.
     """
-    container = _container()
-    if not container:
-        return "[Error] PSI_PILOT_CONTAINER is not set."
+    workdir = os.environ.get("PSI_PILOT_WORKDIR", "/app")
+    resolved = _resolve(file_path, workdir)
 
-    resolved = _resolve(file_path)
-    parent = f"/app" if resolved == "/app" else resolved.rsplit("/", 1)[0]
+    def _do_write() -> int:
+        parent = os.path.dirname(resolved)
+        if parent and not os.path.exists(parent):
+            os.makedirs(parent, exist_ok=True)
+        with open(resolved, "w", encoding="utf-8", newline="\n") as f:
+            f.write(content)
+        return len(content.encode("utf-8"))
 
-    # Rely on `tee` with stdin so content is written verbatim (no shell escaping).
-    inner = (
-        f"mkdir -p {shlex.quote(parent)} && "
-        f"cat > {shlex.quote(resolved)}"
-    )
-
-    proc = await asyncio.create_subprocess_exec(
-        "docker", "exec", "-i", container, "bash", "-lc", inner,
-        stdin=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
     try:
-        stdout, stderr = await asyncio.wait_for(
-            proc.communicate(content.encode("utf-8")), timeout=60
-        )
-    except TimeoutError:
-        proc.kill()
-        await proc.communicate()
-        return f"[Error] Write timed out: {file_path}"
+        size = await asyncio.to_thread(_do_write)
+    except PermissionError:
+        return f"[Error] Permission denied writing {file_path} (resolved to {resolved})"
+    except OSError as e:
+        return f"[Error] Cannot write {file_path}: {e}"
 
-    err = stderr.decode(errors="replace")
-    if proc.returncode != 0:
-        return f"[Error] Cannot write {file_path}: {err}".rstrip()
-
-    size = len(content.encode("utf-8"))
     return f"[OK] Written {size} bytes to {resolved}"
