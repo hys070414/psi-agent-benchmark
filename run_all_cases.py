@@ -42,7 +42,7 @@ WORKDIR = Path(os.environ.get(
 ))
 TASKS_DIR = WORKDIR / "tasks"
 RESULTS_DIR = WORKDIR / "pilot_results"
-MANIFEST_DIR = WORKDIR / "manifests"
+MANIFEST_DIR = WORKDIR / "config"
 MANIFEST_JSON = MANIFEST_DIR / "benchmark_manifest.json"
 MANIFEST_MD = MANIFEST_DIR / "benchmark_manifest.md"
 CONFIG_PATH = WORKDIR / "config" / "benchmark.yaml"
@@ -50,6 +50,11 @@ PSI_DIR = WORKDIR / "psi-agent"
 HARBOR_BIN = os.environ.get("TB_HARBOR_BIN", "harbor")
 UV_BIN = os.environ.get("TB_UV_BIN", "uv")
 WORKSPACE = "examples/tb-pilot-workspace"
+# Path to the tb-pilot-workspace *source* directory on the host (before it is
+# copied into psi-agent/examples/ by setup.sh). We resolve it relative to the
+# benchmark project root so `docker run -v` can mount it into the container as
+# /opt/psi-agent/workspace.
+WORKSPACE_DIR = WORKDIR / "tb-pilot-workspace"
 
 
 # ── 日志 ───────────────────────────────────────────────────────────────────
@@ -602,8 +607,15 @@ def main():
                 save_manifest(manifest)
                 continue
 
-            # 3. 启动容器
-            if not start_env_container(container_name, image_tag, log_fn=log):
+            # 3. 启动容器（挂载 psi-agent + workspace + task + results 进容器）
+            if not start_env_container(
+                container_name, image_tag,
+                psi_dir=PSI_DIR,
+                workspace_dir=WORKSPACE_DIR,
+                task_dir=task_dir,
+                result_dir=result_dir,
+                log_fn=log,
+            ):
                 item["agent_status"] = "container_failed"
                 item["note"] = "failed to start env container"
                 manifest[key] = item

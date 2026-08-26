@@ -9,7 +9,7 @@ set -euo pipefail
 WORKDIR="${TB_BENCH_WORKDIR:-$HOME/psi-agent-benchmark}"
 TASKS_DIR="$WORKDIR/tasks"
 LOG_DIR="$WORKDIR/pilot_results"
-MANIFEST_DIR="$WORKDIR/manifests"
+MANIFEST_DIR="$WORKDIR/config"
 HARBOR_BIN="${HARBOR_BIN:-harbor}"
 FORCE=false
 
@@ -87,8 +87,8 @@ for i in "${!CASES[@]}"; do
     else
         echo "  [build] FAILED, trying docker build from Dockerfile ..." | tee -a "$BUILD_LOG"
         # fallback: try direct docker build
-        if [ -f "$task_dir/Dockerfile" ]; then
-            if docker build -t "$image_tag" -f "$task_dir/Dockerfile" "$task_dir" >> "$BUILD_LOG" 2>&1; then
+        if [ -f "$task_dir/environment/Dockerfile" ]; then
+            if docker build -t "$image_tag" -f "$task_dir/environment/Dockerfile" "$task_dir" >> "$BUILD_LOG" 2>&1; then
                 echo "  [build] OK (docker)" | tee -a "$BUILD_LOG"
             else
                 echo "  [build] FAILED" | tee -a "$BUILD_LOG"
@@ -96,7 +96,7 @@ for i in "${!CASES[@]}"; do
                 continue
             fi
         else
-            echo "  [build] FAILED (no Dockerfile fallback)" | tee -a "$BUILD_LOG"
+            echo "  [build] FAILED (no environment/Dockerfile fallback)" | tee -a "$BUILD_LOG"
             fail=$((fail + 1))
             continue
         fi
