@@ -279,27 +279,27 @@ def build(task: str):
 
     # Pre-install commands (e.g. add repos)
     if "pre" in cfg and cfg["pre"]:
-        dockerfile += f"RUN set -euxo pipefail; {cfg['pre']} 2>&1 | tail -n 80\n"
+        dockerfile += f"RUN set -eux; {cfg['pre']}\n"
 
     # apt packages
     if "apt" in cfg and cfg["apt"]:
         dockerfile += (
-            f"RUN set -euxo pipefail; "
+            f"RUN set -eux; "
             f"apt-get update && "
-            f"apt-get install -y --no-install-recommends {cfg['apt']} 2>&1 | tail -n 80 && "
+            f"apt-get install -y --no-install-recommends {cfg['apt']} && "
             f"rm -rf /var/lib/apt/lists/*\n"
         )
 
     # pip packages
     if "pip" in cfg and cfg["pip"]:
         dockerfile += (
-            f"RUN set -euxo pipefail; "
-            f"pip3 install --no-cache-dir --break-system-packages {cfg['pip']} 2>&1 | tail -n 30\n"
+            f"RUN set -eux; "
+            f"pip3 install --no-cache-dir --break-system-packages {cfg['pip']}\n"
         )
 
     # Post-install commands (e.g. download datasets)
     if "post" in cfg and cfg["post"]:
-        dockerfile += f"RUN set -euxo pipefail; {cfg['post']} 2>&1 | tail -n 40\n"
+        dockerfile += f"RUN set -eux; {cfg['post']}\n"
 
     # Sanity check in Dockerfile
     sanity = cfg.get("sanity_cmds", ["bash", "python3"])
