@@ -64,12 +64,12 @@ OVERLAYS = {
         "priority": "P0",
         "apt": (
             "qemu-system-x86 qemu-system-gui qemu-utils "
-            "seabios vgabios libcapstone4 libxen-4.14 libvdeplug2 "
-            "libjpeg62-turbo liburing1 libaio1 "
+            "seabios vgabios libcapstone4 libvdeplug2 "
+            "libjpeg62-turbo libaio1 "
             "curl socat netcat-openbsd "
             "tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu tesseract-ocr-chi-sim"
         ),
-        "sanity_cmds": ["qemu-system-i386", "curl", "socat", "tesseract"],
+        "sanity_cmds": ["qemu-system-i386", "qemu-system-x86_64", "curl", "socat", "tesseract"],
     },
 
     # ========================================================
@@ -279,27 +279,27 @@ def build(task: str):
 
     # Pre-install commands (e.g. add repos)
     if "pre" in cfg and cfg["pre"]:
-        dockerfile += f"RUN set -eux; {cfg['pre']} 2>&1 | tail -n 80\n"
+        dockerfile += f"RUN set -euxo pipefail; {cfg['pre']} 2>&1 | tail -n 80\n"
 
     # apt packages
     if "apt" in cfg and cfg["apt"]:
         dockerfile += (
-            f"RUN set -eux; "
+            f"RUN set -euxo pipefail; "
             f"apt-get update && "
-            f"apt-get install -y --no-install-recommends {cfg['apt']} 2>&1 | tail -n 40 && "
+            f"apt-get install -y --no-install-recommends {cfg['apt']} 2>&1 | tail -n 80 && "
             f"rm -rf /var/lib/apt/lists/*\n"
         )
 
     # pip packages
     if "pip" in cfg and cfg["pip"]:
         dockerfile += (
-            f"RUN set -eux; "
-            f"pip3 install --no-cache-dir --break-system-packages {cfg['pip']} 2>&1 | tail -n 20\n"
+            f"RUN set -euxo pipefail; "
+            f"pip3 install --no-cache-dir --break-system-packages {cfg['pip']} 2>&1 | tail -n 30\n"
         )
 
     # Post-install commands (e.g. download datasets)
     if "post" in cfg and cfg["post"]:
-        dockerfile += f"RUN set -eux; {cfg['post']} 2>&1 | tail -n 40\n"
+        dockerfile += f"RUN set -euxo pipefail; {cfg['post']} 2>&1 | tail -n 40\n"
 
     # Sanity check in Dockerfile
     sanity = cfg.get("sanity_cmds", ["bash", "python3"])
