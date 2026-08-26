@@ -65,7 +65,6 @@ OVERLAYS = {
         "apt": (
             "qemu-system-x86 qemu-system-gui qemu-utils "
             "seabios vgabios libcapstone4 libvdeplug2 "
-            "libjpeg62-turbo libaio1 "
             "curl socat netcat-openbsd "
             "tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu tesseract-ocr-chi-sim"
         ),
