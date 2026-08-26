@@ -81,18 +81,10 @@ OVERLAYS = {
         "base_tag": "tb-2.1-caffe-cifar-10:latest",
         "new_tag":  "tb-2.1-caffe-cifar-10:overlay-c1",
         "priority": "P1",
-        "apt": "curl ca-certificates file xz-utils zip unzip",
+        "apt": "curl ca-certificates file xz-utils zip unzip python3 python3-pip",
         "pip": "numpy protobuf",
-        # Pre-download CIFAR-10 binary dataset to /opt/datasets/
-        "post": (
-            "mkdir -p /opt/datasets && "
-            "cd /opt/datasets && "
-            "curl -fsSL -o cifar-10-binary.tar.gz "
-            "  https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz && "
-            "tar xzf cifar-10-binary.tar.gz && "
-            "rm cifar-10-binary.tar.gz && "
-            "ls -la /opt/datasets/cifar-10-batches-bin/"
-        ),
+        # CIFAR-10 download removed from build — it times out during docker build.
+        # Agent can download it at runtime if needed, or use pre-existing data.
         "sanity_cmds": ["python3", "curl", "file"],
     },
 
@@ -100,8 +92,10 @@ OVERLAYS = {
         "base_tag": "tb-2.1-chess-best-move:latest",
         "new_tag":  "tb-2.1-chess-best-move:overlay-c1",
         "priority": "P1",
-        "apt": "file xz-utils",
+        "apt": "file xz-utils stockfish",
         "pip": "numpy chess Pillow",
+        # stockfish installs to /usr/games/, not /usr/bin/
+        "post": "ln -sf /usr/games/stockfish /usr/bin/stockfish",
         "sanity_cmds": ["python3", "stockfish"],
     },
 
@@ -203,7 +197,8 @@ OVERLAYS = {
         "base_tag": "tb-3.0-retro-console-soc:latest",
         "new_tag":  "tb-3.0-retro-console-soc:overlay-c1",
         "priority": "P1",
-        "apt": "file python3-pip xz-utils zip unzip ca-certificates",
+        # Fedora 42 base image — use dnf, not apt-get
+        "dnf": "file python3-pip xz zip unzip ca-certificates",
         "pip": "numpy",
         "sanity_cmds": ["python3", "pip3", "verilator"],
     },
@@ -280,13 +275,21 @@ def build(task: str):
     if "pre" in cfg and cfg["pre"]:
         dockerfile += f"RUN set -eux; {cfg['pre']}\n"
 
-    # apt packages
+    # apt packages (Debian/Ubuntu)
     if "apt" in cfg and cfg["apt"]:
         dockerfile += (
             f"RUN set -eux; "
             f"apt-get update && "
             f"apt-get install -y --no-install-recommends {cfg['apt']} && "
             f"rm -rf /var/lib/apt/lists/*\n"
+        )
+
+    # dnf packages (Fedora/RHEL)
+    if "dnf" in cfg and cfg["dnf"]:
+        dockerfile += (
+            f"RUN set -eux; "
+            f"dnf install -y {cfg['dnf']} && "
+            f"dnf clean all\n"
         )
 
     # pip packages
