@@ -24,8 +24,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 WORKDIR = Path(os.environ.get("TB_BENCH_WORKDIR", f"{os.environ.get('HOME', '/root')}/psi-agent-benchmark"))
-MANIFEST_JSON = WORKDIR / "manifests" / "benchmark_manifest.json"
-METADATA_JSON = WORKDIR / "manifests" / "case_metadata.json"
+MANIFEST_JSON = WORKDIR / "config" / "benchmark_manifest.json"
+METADATA_JSON = WORKDIR / "config" / "case_metadata.json"
 RESULTS_DIR = WORKDIR / "pilot_results"
 CHARS_PER_TOKEN = 4.0
 LOG_TAIL_LINES = 30
